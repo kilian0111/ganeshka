@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://squirel.kilian-marmilliot.com:8055/auth/";
+const API_URL = "http://squirel.kilian-marmilliot.com:8055/";
 
 const register = (lastName, firstName, pseudo, DateNaissance, email, password) => {
   return axios.post(API_URL + "users", {
@@ -17,7 +17,7 @@ const register = (lastName, firstName, pseudo, DateNaissance, email, password) =
 
 const login = (email, password) => {
   return axios
-    .post(API_URL + "login", {
+    .post(API_URL + "auth/login", {
       email,
       password,
     })

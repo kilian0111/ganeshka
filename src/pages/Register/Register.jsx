@@ -34,7 +34,6 @@ export default function Register() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('début inscription');
         const data = new FormData(event.currentTarget);
 
         //Je récupère les infos de mon formulaire
