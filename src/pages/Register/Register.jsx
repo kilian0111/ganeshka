@@ -44,15 +44,16 @@ export default function Register() {
         const password = event.target.password.value;
         const password_comfirm = event.target.password_comfirm.value;
 
-        const DateNaissance = new Date(value); //Besoin de gérer ça différement
-        //console.log(DateNaissance.getFullYear() + '-' + (DateNaissance.getMonth() + 1) + '-' + DateNaissance.getDate());
+        const dateNaissance = new Date(value); //Besoin de gérer ça différement
+        const birthDate = dateNaissance.getFullYear() + '-' + (dateNaissance.getMonth() + 1) + '-' + dateNaissance.getDate();
+        console.log(birthDate);
 
 
         console.log({
             lastName: data.get('lastName'),
             firstName: data.get('firstName'),
             pseudo: data.get('pseudo'),
-            DateNaissance: DateNaissance,
+            birthDate: birthDate,
             email: data.get('email'),
             password: data.get('password'),
             password_comfirm: data.get('password_comfirm'),
@@ -63,14 +64,13 @@ export default function Register() {
             alert("Les MdP sont différents !");
             return;
         }else{
-            authService.register(lastName, firstName, pseudo, DateNaissance, email, password);
-            console.log('Fin inscription');
+            authService.register(lastName, firstName, pseudo, birthDate, email, password);
 
             //Redirection 
             navigate("/login");
             window.location.reload();
         }
-
+        
     };
 
   return (
