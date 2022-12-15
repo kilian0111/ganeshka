@@ -2,11 +2,16 @@ import axios from "axios";
 
 const API_URL = "http://squirel.kilian-marmilliot.com:8055/auth/";
 
-const register = (username, email, password) => {
-  return axios.post(API_URL + "signup", {
-    username,
-    email,
-    password,
+const register = (lastName, firstName, pseudo, DateNaissance, email, password) => {
+  return axios.post(API_URL + "users", {
+    // Nom_colonne : $variable,
+    last_name : lastName,
+    first_name : firstName,
+    pseudo : pseudo, 
+    DateNaissance : DateNaissance, 
+    email : email, 
+    password : password,
+    role : "36a16160-8828-438a-892c-3fe2ec572ab9" 
   });
 };
 
