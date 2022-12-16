@@ -48,7 +48,6 @@ export default function Register() {
         const DateNaissance = new Date(value); //Besoin de gérer ça différement
         //console.log(DateNaissance.getFullYear() + '-' + (DateNaissance.getMonth() + 1) + '-' + DateNaissance.getDate());
 
-
         console.log({
             lastName: data.get('lastName'),
             firstName: data.get('firstName'),
