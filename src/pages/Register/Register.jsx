@@ -34,9 +34,8 @@ export default function Register() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
 
-        //Je récupère les infos de mon formulaire
+        //Récupère les infos de mon formulaire
         const lastName = event.target.lastName.value;
         const firstName = event.target.firstName.value;
         const pseudo = event.target.pseudo.value;
@@ -46,18 +45,6 @@ export default function Register() {
 
         const dateNaissance = new Date(value); //Besoin de gérer ça différement
         const birthDate = dateNaissance.getFullYear() + '-' + (dateNaissance.getMonth() + 1) + '-' + dateNaissance.getDate();
-        console.log(birthDate);
-
-
-        console.log({
-            lastName: data.get('lastName'),
-            firstName: data.get('firstName'),
-            pseudo: data.get('pseudo'),
-            birthDate: birthDate,
-            email: data.get('email'),
-            password: data.get('password'),
-            password_comfirm: data.get('password_comfirm'),
-        });
 
         //Verif MdP
         if (password !== password_comfirm) {
@@ -66,10 +53,11 @@ export default function Register() {
         }else{
             authService.register(lastName, firstName, pseudo, birthDate, email, password);
 
-            //Redirection 
-            navigate("/login");
-            window.location.reload();
         }
+
+        //Redirection 
+        navigate("/login");
+        window.location.reload();
         
     };
 
