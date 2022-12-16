@@ -34,10 +34,8 @@ export default function Register() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('début inscription');
-        const data = new FormData(event.currentTarget);
 
-        //Je récupère les infos de mon formulaire
+        //Récupère les infos de mon formulaire
         const lastName = event.target.lastName.value;
         const firstName = event.target.firstName.value;
         const pseudo = event.target.pseudo.value;
@@ -48,29 +46,23 @@ export default function Register() {
         const DateNaissance = new Date(value); //Besoin de gérer ça différement
         //console.log(DateNaissance.getFullYear() + '-' + (DateNaissance.getMonth() + 1) + '-' + DateNaissance.getDate());
 
-        console.log({
-            lastName: data.get('lastName'),
-            firstName: data.get('firstName'),
-            pseudo: data.get('pseudo'),
-            DateNaissance: DateNaissance,
-            email: data.get('email'),
-            password: data.get('password'),
-            password_comfirm: data.get('password_comfirm'),
-        });
+
+        const dateNaissance = new Date(value); //Besoin de gérer ça différement
+        const birthDate = dateNaissance.getFullYear() + '-' + (dateNaissance.getMonth() + 1) + '-' + dateNaissance.getDate();
 
         //Verif MdP
         if (password !== password_comfirm) {
             alert("Les MdP sont différents !");
             return;
         }else{
-            authService.register(lastName, firstName, pseudo, DateNaissance, email, password);
-            console.log('Fin inscription');
+            authService.register(lastName, firstName, pseudo, birthDate, email, password);
 
-            //Redirection 
-            navigate("/login");
-            window.location.reload();
         }
 
+        //Redirection 
+        navigate("/login");
+        window.location.reload();
+        
     };
 
   return (

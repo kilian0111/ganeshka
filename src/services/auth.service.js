@@ -1,14 +1,14 @@
 import axios from "axios";
 
-const API_URL = "http://squirel.kilian-marmilliot.com:8055/auth/";
+const API_URL = "http://squirel.kilian-marmilliot.com:8055/";
 
-const register = (lastName, firstName, pseudo, DateNaissance, email, password) => {
+const register = (lastName, firstName, pseudo, birthDate, email, password) => {
   return axios.post(API_URL + "users", {
     // Nom_colonne : $variable,
     last_name : lastName,
     first_name : firstName,
     pseudo : pseudo, 
-    DateNaissance : DateNaissance, 
+    birthDate : birthDate, 
     email : email, 
     password : password,
     role : "36a16160-8828-438a-892c-3fe2ec572ab9" 
@@ -17,7 +17,7 @@ const register = (lastName, firstName, pseudo, DateNaissance, email, password) =
 
 const login = (email, password) => {
   return axios
-    .post(API_URL + "login", {
+    .post(API_URL + "auth/login", {
       email,
       password,
     })
