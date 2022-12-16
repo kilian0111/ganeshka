@@ -43,10 +43,6 @@ export default function Register() {
         const password = event.target.password.value;
         const password_comfirm = event.target.password_comfirm.value;
 
-        const DateNaissance = new Date(value); //Besoin de gérer ça différement
-        //console.log(DateNaissance.getFullYear() + '-' + (DateNaissance.getMonth() + 1) + '-' + DateNaissance.getDate());
-
-
         const dateNaissance = new Date(value); //Besoin de gérer ça différement
         const birthDate = dateNaissance.getFullYear() + '-' + (dateNaissance.getMonth() + 1) + '-' + dateNaissance.getDate();
 
