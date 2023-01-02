@@ -60,10 +60,6 @@ export default function Register() {
             });
 
         }
-
-        //Redirection 
-        // navigate("/login");
-        // window.location.reload();
         
     };
 
