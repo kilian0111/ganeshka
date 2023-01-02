@@ -13,9 +13,11 @@ import Conversation from './pages/conversation/conversation';
 import { Navbar } from './components/atoms/Navbar/Navbar';
 import { ThemeProvider } from "@mui/material/styles";
 import createTheme from './themes/default.js'
+import refreshTokenInterceptor from "./config/refreshTokenInterceptor";
 
 function App() {
 
+    refreshTokenInterceptor(store);
   return (
       <Provider store={store} >
         <ThemeProvider theme={createTheme}>
