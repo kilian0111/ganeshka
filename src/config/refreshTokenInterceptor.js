@@ -45,7 +45,6 @@ const setup = (store) => {
 
                         }
                     ).catch((error) => {
-                        console.log('error', error);
                         dispatch(deleteToken());
                     });
 

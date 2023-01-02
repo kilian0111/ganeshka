@@ -35,9 +35,18 @@ export default function Login() {
 
     const [loading, setLoading] = useState(false);
 
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+    });
+
+
+    const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
     const { isLoggedIn,token } = useSelector((state) => state.auth);
     const user  = useSelector((state) => state.users);
     const { message } = useSelector((state) => state.message);
+
 
     const dispatch = useDispatch();
 
@@ -48,12 +57,10 @@ export default function Login() {
     const handleLogin = (e) => {
       e.preventDefault();
 
-      const email = e.target.email.value;
-      const password = e.target.password.value;
 
       setLoading(true);
 
-      dispatch(login({ email , password }))
+      dispatch(login({ email:formData.email, password:formData.password }))
         .unwrap()
         .then((res) => {
 
@@ -96,6 +103,8 @@ export default function Login() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={formData.email}
+                onChange={(e) => onChange(e)}
             />
             <TextField
                 margin="normal"
@@ -106,6 +115,8 @@ export default function Login() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={formData.password}
+                onChange={(e) => onChange(e)}
             />
             <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}

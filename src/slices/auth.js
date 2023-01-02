@@ -62,6 +62,7 @@ const authSlice = createSlice({
     reloadToken: (state, action) => {
       state.token = action.payload.token;
       state.refreshToken = action.payload.refreshToken;
+      state.isLoggedIn = true;
       localStorage.setItem("access_token", action.payload.token);
       localStorage.setItem("refresh_token", action.payload.refreshToken);
       return state;
@@ -69,9 +70,10 @@ const authSlice = createSlice({
     deleteToken: (state,action ) => {
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
+      state.isLoggedIn = false;
       state.token = null;
       state.refreshToken = null;
-
+      return state;
     }
   },
   extraReducers: {

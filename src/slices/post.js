@@ -10,7 +10,7 @@ export const getPost = createAsyncThunk(
         try {
             const response = await postService.getAllPost(token);
             thunkAPI.dispatch(setMessage(response.data.message));
-            
+
             return response;
 
         } catch (error) {
@@ -32,7 +32,6 @@ const postsSlice = createSlice({
     initialState: null,
     extraReducers: {
         [getPost.fulfilled]: (state, action) => {
-            console.log(action);
             state = action.payload;
             return state
         },

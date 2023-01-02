@@ -1,7 +1,6 @@
 import React from 'react'
 import {useDispatch, useSelector} from 'react-redux';
 import {PostCard} from '../../components/molecules/PostCard'
-import usersService from '../../services/user.service';
 import {getUserAuth} from "../../slices/user";
 import {getPost} from "../../slices/post";
 import {useEffect} from "react";
@@ -56,7 +55,6 @@ export const Home = () => {
     dispatch(getPost({ token:token}));
   }, []);
 
-  console.log(posts)
 
   const card = () => {
     if(posts){
@@ -80,7 +78,7 @@ export const Home = () => {
       <div> Fil d'actualité</div>
 
       {card()}
-      
+
     </div>
   )
 }
