@@ -51,7 +51,13 @@ export default function Register() {
             alert("Les MdP sont différents !");
             return;
         }else{
-            authService.register(lastName, firstName, pseudo, birthDate, email, password);
+            authService.register(lastName, firstName, pseudo, birthDate, email, password).then(() => {
+                //Si ça marche
+            }).catch((error) => {
+                //Si j'ai une erreur 
+                //Directus me retourne une erreur si j'ai déjà utilisé mon adressse mail
+                alert("L'adresse mail déjà utilisé !");
+            });
 
         }
 
