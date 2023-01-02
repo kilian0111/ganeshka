@@ -38,10 +38,7 @@ const usersSlice = createSlice({
             state = action.payload;
             return state;
         },
-        [getUserAuth.rejected]: (state, action) => {
-            state = null;
-            return state;
-        },
+
     },
 });
 

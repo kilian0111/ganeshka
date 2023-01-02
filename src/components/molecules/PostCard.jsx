@@ -10,11 +10,13 @@ import ShareIcon from '@mui/icons-material/Share';
 
 
 export function PostCard({ user, title, desc ,...props}) {
+  console.log('user');
+  console.log(user);
   return (
     <Card sx={{ minWidth: 275, textAlign: 'start', margin: '10px' }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            {user.name_user}
+            {user.last_name}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {title}
