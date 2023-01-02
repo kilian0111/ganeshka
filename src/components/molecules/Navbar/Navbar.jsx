@@ -46,9 +46,10 @@ export const Navbar = () => {
     const menu = [
         { text: 'Accueil', link: '/' },
     ];
-    console.log(isLoggedIn);
     if (isLoggedIn) {
         menu.push({ text: 'Messages', link: '/messages' });
+        menu.push({ text: 'Paramètre', link: '/parametre'});
+
         menu.push({ text: 'Logout', link: '#', action: () => {dispatch(deleteToken());  navigate("/login"); } });
 
     } else {

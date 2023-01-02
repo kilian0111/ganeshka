@@ -14,6 +14,7 @@ import { Navbar } from './components/molecules/Navbar/Navbar';
 import { ThemeProvider } from "@mui/material/styles";
 import createTheme from './themes/default.js'
 import refreshTokenInterceptor from "./config/refreshTokenInterceptor";
+import UserProfile from "./pages/parametre/paramtre";
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/messages" element={<Chat />} />
             <Route path="/conversation" element={<Conversation />} />
+            <Route path="/parametre" element={<UserProfile />} />
           </Routes>
         </div>
         </ThemeProvider>

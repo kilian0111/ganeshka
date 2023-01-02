@@ -7,7 +7,7 @@ import postReducer from "../slices/post";
 const reducer = {
   auth: authReducer,
   message: messageReducer,
-  usersSlice: usersReducer,
+  users: usersReducer,
   posts: postReducer,
 }
 

@@ -46,7 +46,7 @@ const fakeData = ({
 
 export const Home = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.usersSlice);
+  const user = useSelector((state) => state.users.me);
   const token = useSelector((state) => state.auth.token);
   const posts = useSelector((state) => state.posts)
 
