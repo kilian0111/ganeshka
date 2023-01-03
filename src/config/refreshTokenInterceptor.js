@@ -1,6 +1,7 @@
 import axiosInstance from "./api";
 import { reloadToken, deleteToken } from "../slices/auth";
 
+let refreshAlreadyCalled = false;
 
 const setup = (store) => {
     axiosInstance.interceptors.request.use(
@@ -29,7 +30,8 @@ const setup = (store) => {
             if (originalConfig.url !== "/auth/refresh" && err.response && refreshToken) {
 
                 // Access Token was expired
-                if (err.response.status === 401 && !originalConfig._retry) {
+                if (err.response.status === 401 && !originalConfig._retry && !refreshAlreadyCalled) {
+                    refreshAlreadyCalled = true;
                     originalConfig._retry = true;
 
 
@@ -45,13 +47,13 @@ const setup = (store) => {
 
                         }
                     ).catch((error) => {
-                        dispatch(deleteToken());
-                    });
 
+                    });
+                    refreshAlreadyCalled = false;
                     return axiosInstance(originalConfig);
                 }
             }
-
+            refreshAlreadyCalled = false;
             return Promise.reject(err);
         }
     );
