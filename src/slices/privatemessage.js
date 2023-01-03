@@ -24,7 +24,6 @@ export const getPrivateMessage = createAsyncThunk(
     }
 );
 
-
 const privateMessageSlice = createSlice({
     name: "privateMessage",
     initialState: {message: null},

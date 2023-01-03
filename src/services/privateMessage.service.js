@@ -11,8 +11,16 @@ const getAllPrivateMessage = async () => {
 
 };
 
+const postPrivateMessage = async (data) => {
+
+    const response = await api.post(API_URL, data)
+    console.log(response);
+    return response;
+}
+
 const privateMessageService = {
     getAllPrivateMessage,
+    postPrivateMessage,
 };
 
 export default privateMessageService;
