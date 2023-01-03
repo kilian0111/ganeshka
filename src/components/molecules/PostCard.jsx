@@ -14,7 +14,7 @@ export function PostCard({ user, title, desc ,...props}) {
     <Card sx={{ minWidth: 275, textAlign: 'start', margin: '10px' }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-            {user.last_name}
+          {user.first_name} {user.last_name}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
             {title}
