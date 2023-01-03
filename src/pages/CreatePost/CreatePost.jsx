@@ -21,6 +21,7 @@ const dispatch = useDispatch();
 let navigate = useNavigate();
 const token = useSelector((state) => state.auth.token);
 const user = useSelector((state) => state.users.me);
+
 useEffect(() => {
     dispatch(getUserAuth({ token:token}));
   }, []);
@@ -28,11 +29,14 @@ const [formData, setFormData] = useState({
     title_post: '',
     content_post: '',
     status: 'published',
-    user_created: user.id,
+    user_created: user?.id || null,
 });
     const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
     const handleSubmit = async (event) => {
     event.preventDefault();
+    if(!user) {
+        navigate("/login");
+    }
     
     
     const response = await postService.postPost(formData);
