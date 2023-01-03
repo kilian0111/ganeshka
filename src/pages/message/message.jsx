@@ -13,19 +13,36 @@ import Config from '../../config';
 import API from '../../config/api';
 import usersService from '../../services/user.service';
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 const API_URL = Config.API_URL + "users/";
 
 export default function Chat () {
 
     const [allUser, setAllUser] = useState([]); 
+    const [research, setResearch ] = useState();
+    const dispatch = useDispatch;
+    
+    const token = useSelector((state) => {
+        return state.auth.token
+    })
     
     // {1} : Requête récupérant les données
     const ChargementPage = async () => {
         // Initialisation des variables
         let table = []; // Creation d'un tableau vide qui contiendra les données de la requête
+        let currentId = {};
 
-        await usersService.getUsers()    
+        // On récupère l'id de l'utilisateur connecter afin de ne pas l'avoir dans les données retournée par l'API
+        await usersService.getUserAuth(token).then((res) => {
+            currentId = res.data.id;
+            return currentId
+        })
+        .catch((e) =>{
+            console.log("Error : No Current User find")
+        })
+
+        await usersService.getUsers(currentId)    
         .then((res) => {
             //Si ça marche
             // console.log("resultat users : ", res);
@@ -41,14 +58,16 @@ export default function Chat () {
             console.log("ECHEC")
             return "ERROR";
         });
-      
     };
-    //
+ 
     useEffect(() => {
         ChargementPage()
     }, [])
-
+    
     // {2} : Function utilisant {1} à chaque écriture dans la Search Bar
+    const QdGChange = async () => {
+        setResearch() ;
+    }
 
     
     
@@ -59,7 +78,7 @@ export default function Chat () {
             {/* Title  */}
             <Grid container>
                 <Grid item xs={12} >
-                    <Typography variant="h5" className="header-message">Chat</Typography>
+                    <Typography variant="h5" className="header-message">Chat {research}</Typography>
                 </Grid>
             </Grid>
             {/* Title  -- END --*/}
@@ -74,35 +93,33 @@ export default function Chat () {
                 }}>
 
                     {/* Connected User  */}
-            
 
                     {/* Connected User -- END -- */}
 
                     {/* Search Bar */}
                     <Divider />
-                    <Grid item xs={12} style={{padding: '10px'}}>
-                        <TextField id="outlined-basic-email" label="Search" variant="outlined" fullWidth />
-                    </Grid>
+                        <Grid item xs={12} style={{padding: '10px'}}>
+                            <TextField id="SearchBar_Users" label="Search" variant="outlined" fullWidth onChange={QdGChange()} />
+                        </Grid>
                     <Divider />
-                    <List>
                     {/* Search Bar -- END -- */}
                     
-                    {/* User Find -- END -- */}
+                    {/* User Find */}
+                    <List>
                     { allUser.map((user, id) => {
-                    console.log(user)
-                    return  (   
-                        <>
-                            <List>
-                                <ListItem button key="User">
-                                    <ListItemIcon>
-                                        <Avatar alt={user.first_name} src={"http://squirel.kilian-marmilliot.com:8055/assets/" + user.avatar} />
-                                    </ListItemIcon>
-                                    <ListItemText primary={user.first_name + " " + (user.last_name?user.last_name:" ")}></ListItemText>
-                                </ListItem>
-                            </List>
-                        </>);
-                    })}             
-                        {/* User Find -- END -- */}
+                        return  (   
+                            <>
+                                <List>
+                                    <ListItem button key="User">
+                                        <ListItemIcon>
+                                            <Avatar alt={user.first_name} src={"http://squirel.kilian-marmilliot.com:8055/assets/" + user.avatar} />
+                                        </ListItemIcon>
+                                        <ListItemText primary={user.first_name + " " + (user.last_name?user.last_name:" ")}></ListItemText>
+                                    </ListItem>
+                                </List>
+                            </>);
+                        })}             
+                    {/* User Find -- END -- */}
 
                     </List>
                 </Grid>

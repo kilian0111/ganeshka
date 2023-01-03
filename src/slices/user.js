@@ -5,9 +5,9 @@ import usersService from "../services/user.service";
 
 export const getUserAuth = createAsyncThunk(
     "users/me",
-    async (thunkAPI) => {
+    async ([token],thunkAPI) => {
         try {
-            const response = await usersService.getUserAuth();
+            const response = await usersService.getUserAuth(token);
             thunkAPI.dispatch(setMessage(response.data.message));
 
             return response.data;

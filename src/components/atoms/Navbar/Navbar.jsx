@@ -73,6 +73,7 @@ export const Navbar = () => {
                         </IconButton>
                     </Hidden>
                     <Avatar className={styles.avatar}>A</Avatar>
+
                 </Toolbar>
             </Container>
             <SwipeableDrawer anchor='left' open={open} onOpen={() => setOpen(true)} onClose={() => setOpen(false)}>
