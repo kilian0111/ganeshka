@@ -3,20 +3,23 @@ import api from '../config/api';
 
 const API_URL = config.API_URL + "users/";
 
+// récupère l'utilisateur courant      Auth => Authentificate
+const getUserAuth = async () => {
 
-const getUserAuth = async (token) => {
-    const config = {
-        Authorization: `Bearer ${token}`
-    };
-    const response = await api.get(API_URL + "me",{
-        headers: config,
-    })
-
+    const response = await api.get(API_URL + "me/")
     return response.data;
 };
 
+// récupère les utilisateurs actif
+const getUsers = async () => {
+    const response = await api.get(API_URL)
+    
+    return response.data;
+}
+
 const usersService = {
     getUserAuth,
+    getUsers,
 };
 
 export default usersService;

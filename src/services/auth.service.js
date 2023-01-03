@@ -3,6 +3,7 @@ import api from '../config/api';
 
 const API_URL = config.API_URL + "auth/";
 
+// Enregistre l'utilisateur
 const register = (username, email, password) => {
   return api.post(API_URL + "signup", {
     username,
@@ -11,6 +12,7 @@ const register = (username, email, password) => {
   });
 };
 
+// Connecte l'utilisateur
 const login = (email, password) => {
   return api
     .post(API_URL + "login", {
@@ -26,6 +28,7 @@ const login = (email, password) => {
     });
 };
 
+// Deconnecte l'utilisateur
 const logout = () => {
   localStorage.removeItem("user");
 };

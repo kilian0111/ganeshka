@@ -25,7 +25,7 @@ function Copyright(props) {
         Squirrel
       {' '}
       {new Date().getFullYear()}
-      {'.'}
+      {'.'}Fma
     </Typography>
   );
 }
