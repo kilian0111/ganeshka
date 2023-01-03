@@ -6,12 +6,45 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Logo } from '../../components/atoms/Logo/Logo';
+import postService from "../../services/post.service";
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import {getUserAuth} from "../../slices/user";
+import { useDispatch } from 'react-redux';
+
+
 
 export default function CreatePost() {
-  const handleSubmit = (event) => {
+const dispatch = useDispatch();
+let navigate = useNavigate();
+const token = useSelector((state) => state.auth.token);
+const user = useSelector((state) => state.users.me);
+
+useEffect(() => {
+    dispatch(getUserAuth({ token:token}));
+  }, []);
+const [formData, setFormData] = useState({
+    title_post: '',
+    content_post: '',
+    status: 'published',
+    user_created: user?.id || null,
+});
+    const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-  };
+    if(!user) {
+        navigate("/login");
+    }
+    
+    
+    const response = await postService.postPost(formData);
+
+    if (response.status === 200) {
+        navigate("/");
+    }
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -33,11 +66,12 @@ export default function CreatePost() {
                 margin="normal"
                 required
                 fullWidth
-                id="title"
+                id="title_post"
                 label="Titre"
-                name="title"
-                autoComplete="title"
+                name="title_post"
+                autoComplete="title_post"
                 autoFocus
+                onChange={(e) => onChange(e)}
             />
             <TextField
                 margin="normal"
@@ -45,11 +79,12 @@ export default function CreatePost() {
                 fullWidth
                 multiline
                 rows={7}
-                name="desc"
+                name="content_post"
                 label="Description"
-                type="desc"
-                id="desc"
+                type="content_post"
+                id="content_post"
                 autoComplete="current-password"
+                onChange={(e) => onChange(e)}
             />
 
             <Button

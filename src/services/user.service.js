@@ -4,13 +4,8 @@ import api from '../config/api';
 const API_URL = config.API_URL + "users/";
 
 
-const getUserAuth = async (token) => {
-    const config = {
-        Authorization: `Bearer ${token}`
-    };
-    const response = await api.get(API_URL + "me",{
-        headers: config,
-    })
+const getUserAuth = async () => {
+    const response = await api.get(API_URL + "me")
 
     return response.data;
 };

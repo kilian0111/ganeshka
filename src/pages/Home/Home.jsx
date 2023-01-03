@@ -4,6 +4,9 @@ import {PostCard} from '../../components/molecules/PostCard'
 import {getUserAuth} from "../../slices/user";
 import {getPost} from "../../slices/post";
 import {useEffect} from "react";
+import { Navigate, useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+
 const fakeData = ({
 
   1: {
@@ -55,6 +58,11 @@ export const Home = () => {
     dispatch(getPost({ token:token}));
   }, []);
 
+  const navigate = useNavigate();
+  
+  const redirectCreatePost = () => {
+    navigate('/createPost');
+  }
 
   const card = () => {
     if(posts){
@@ -76,6 +84,7 @@ export const Home = () => {
   return (
     <div>
       <div> Fil d'actualité</div>
+      <Button variant="contained" onClick={redirectCreatePost} >Créer un Post</Button>
 
       {card()}
 

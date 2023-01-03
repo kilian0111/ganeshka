@@ -1,22 +1,24 @@
 import config from '../config';
 import api from '../config/api';
 
-const API_URL = config.API_URL + "items/post?fields=*,user_created.*";
+const API_URL = config.API_URL + "items/post";
 
 
-const getAllPost = async (token) => {
-    const config = {
-        Authorization: `Bearer ${token}`
-    };
-    const response = await api.get(API_URL ,{
-        headers: config,
-    })
+const getAllPost = async () => {
+
+    const response = await api.get(API_URL + '?fields=*,user_created.*' );
 
     return response.data;
 };
 
+const postPost = async (data) => {
+
+    const response = await api.post(API_URL, data)
+    return response;
+}
 const postService = {
     getAllPost,
+    postPost,
 };
 
 export default postService;
