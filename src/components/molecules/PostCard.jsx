@@ -6,10 +6,34 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import {getUserAuth} from "../../slices/user";
+import { useDispatch } from 'react-redux';
+import postService from "../../services/post.service";
 
 
 
-export function PostCard({ user, title, desc ,...props}) {
+export function PostCard({ user, id, title, desc ,...props}) {
+  const dispatch = useDispatch();
+  const me = useSelector((state) => state.users.me);
+  const token = useSelector((state) => state.auth.token);
+  const colorLike = me?.like?.find(mee => mee['post_id'] === id) ? 'error' : 'default';
+
+  const likeAction = async () => {
+        
+    if(colorLike === 'error') {
+      
+      await postService.unlikePost( me?.like?.find(mee => mee['post_id'] === id)?.id );
+    } else {
+      await postService.likePost( id,  me.id );
+    } 
+
+    dispatch(getUserAuth({ token:token}));
+
+  }
+  
+  console.log(me);
   return (
     <Card sx={{ minWidth: 275, textAlign: 'start', margin: '10px' }}>
       <CardContent>
@@ -23,12 +47,9 @@ export function PostCard({ user, title, desc ,...props}) {
             {desc}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing sx={{ justifyContent : 'end' }}>
-        <IconButton aria-label="add to favorites">
+      <CardActions onClick={likeAction} disableSpacing sx={{ justifyContent : 'end' }}>
+        <IconButton color={colorLike}>
           <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
         </IconButton>
       </CardActions>
     </Card>

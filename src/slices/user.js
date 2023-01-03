@@ -7,9 +7,9 @@ export const getUserAuth = createAsyncThunk(
     "users/me",
     async ({ token },thunkAPI) => {
         try {
+            console.log('YO GRANDS');
             const response = await usersService.getUserAuth(token);
             thunkAPI.dispatch(setMessage(response.data.message));
-
             return response.data;
         } catch (error) {
             const message =

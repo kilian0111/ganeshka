@@ -8,7 +8,7 @@ const getUserAuth = async (token) => {
     const config = {
         Authorization: `Bearer ${token}`
     };
-    const response = await api.get(API_URL + "me",{
+    const response = await api.get(API_URL + "me?fields=*,like.*",{
         headers: config,
     })
 
