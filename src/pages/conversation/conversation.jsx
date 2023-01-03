@@ -6,25 +6,27 @@ import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
 import {AiOutlineSend} from "react-icons/ai";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Avatar from "@mui/material/Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { getPrivateMessage } from "../../slices/privatemessage";
-import { clearMessage } from "../../slices/printError";
 import { getUserAuth } from "../../slices/user";
+import { useTheme } from "@mui/material/styles";
+import './Conversation.css'
+
 
 const Conversation = () => {
     const user = useSelector((state) => state.users.me);
-    const token = useSelector((state) => state.auth.token);
     const { privateMessage } = useSelector((state) => state);
-
+    const theme = useTheme();
+console.log(theme.palette);
     const dispatch = useDispatch();
 
     console.log("PrivateMessage", privateMessage.message);
     console.log('User', user)
     useEffect(() => {
-        dispatch(getUserAuth({ token:token}));
+        dispatch(getUserAuth());
         dispatch(getPrivateMessage());
     }, []);
     return (    
@@ -38,38 +40,37 @@ const Conversation = () => {
                         <ListItemText primary="John Wick"></ListItemText>
                     </ListItem>
                 </List>
+                <div className="scroll">
                 <List className={{
                     height: '70vh',
                     overflowY: 'auto',
                 }}>
-                    <ListItem key="1">
-                        <Grid container>
-                            {privateMessage.message?.map((message, key) => (
+                    {privateMessage.message?.map((message, key) => (
+                        <ListItem key={message.id}>
+                            {message.user_created.id === user.id ? (
                                 <>
-                                    {message.user_created.id === user.id ? (
-                                        <>
-                                            <Grid item xs={12}>
-                                                <ListItemText key={message} style={{ backgroundColor: 'red'}} align="right" primary={message.content_pm}></ListItemText>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <ListItemText align="right" secondary={(new Date(message.date_created)).toLocaleTimeString()}></ListItemText>
-                                            </Grid>
-                                        </>
-                                    ):(
-                                        <>
-                                            <Grid item xs={12}>
-                                                <ListItemText style={{ backgroundColor: 'grey'}} align="left" primary={message.content_pm}></ListItemText>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <ListItemText align="right" secondary={(new Date(message.date_created)).toLocaleTimeString()}></ListItemText>
-                                            </Grid>
-                                        </>
-                                    )}
+                                <Grid container className="flex-end">
+                                    <div className="containerMessage">
+                                        <ListItemText key={message} className="message" style={{ backgroundColor: theme.palette.primary.main, color:'white' }} align="right" primary={message.content_pm}></ListItemText>
+                                        <ListItemText align="right" secondary={(new Date(message.date_created)).toLocaleTimeString()}></ListItemText>
+                                    </div>
+                                </Grid>
                                 </>
-                            ))}
-                            </Grid>
-                    </ListItem>
+                            ):(
+                                <>
+                                    <Grid container className="flex-start">
+                                        <div className="containerMessage">
+                                            <ListItemText key={message} className="message" style={{ backgroundColor: 'white'}} align="left" primary={message.content_pm}></ListItemText>
+                                            <ListItemText align="right" secondary={(new Date(message.date_created)).toLocaleTimeString()}></ListItemText>
+                                        </div>
+                                    </Grid>
+                                </>
+                            )}
+                            
+                        </ListItem>
+                    ))}
                 </List>
+                </div>
                 <Divider />
                 <Grid container style={{padding: '5px'}}>
                     <Grid item xs={10}>

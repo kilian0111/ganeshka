@@ -30,7 +30,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/messages" element={<Chat />} />
-            <Route path="/conversation" element={<Conversation />} />
+            <Route path="/conversation/:id" element={<Conversation />} />
             <Route path="/parametre" element={<UserProfile />} />
           </Routes>
         </div>

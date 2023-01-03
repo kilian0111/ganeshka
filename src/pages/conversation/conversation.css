@@ -1,28 +1,39 @@
-.talk-bubble {
-    margin: 40px;
-    display: inline-block;
-    position: relative;
-    width: 200px;
-    height: auto;
-    background-color: lightyellow;
+.flex-end{
+    justify-content: flex-end;
 }
 
-.round{
-    border-radius: 30px;
-    -webkit-border-radius: 30px;
-    -moz-border-radius: 30px;
-
+.containerMessage{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
-.tri-right.right-in:after{
-    content: ' ';
-    position: absolute;
-    width: 0;
-    height: 0;
-    left: auto;
-    right: -20px;
-    top: 38px;
-    bottom: auto;
-    border: 12px solid;
-    border-color: lightyellow transparent transparent lightyellow;
+.containerMessage{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.flex-start .containerMessage{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.message{
+    border-radius: 50px;
+    filter: drop-shadow(0 0 0.25rem rgb(216, 216, 216));
+    padding: 5px;
+}
+
+.message span{
+    margin: 2px;
+}
+
+.scroll{
+    overflow-y: scroll;
+    height: 70vh;
 }
