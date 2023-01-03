@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from "../slices/auth";
-import messageReducer from "../slices/message";
+import messageReducer from "../slices/printError";
 import usersReducer from "../slices/user";
 import postReducer from "../slices/post";
 

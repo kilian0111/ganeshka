@@ -8,13 +8,13 @@ import { Provider } from 'react-redux';
 import store from './store/store'
 import  Login  from './pages/Login/Login';
 import  Register  from './pages/Register/Register';
-import Chat from './pages/message/message';
+import Chat from './pages/message/Message';
 import Conversation from './pages/conversation/conversation';
 import { Navbar } from './components/molecules/Navbar/Navbar';
 import { ThemeProvider } from "@mui/material/styles";
 import createTheme from './themes/default.js'
 import refreshTokenInterceptor from "./config/refreshTokenInterceptor";
-import UserProfile from "./pages/parametre/paramtre";
+import UserProfile from "./pages/parametre/Paramtre";
 
 function App() {
 

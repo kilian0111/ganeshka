@@ -11,7 +11,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Logo } from '../../components/atoms/Logo/Logo';
-import { useState } from 'react';
+
+import authService from '../../services/auth.service';
+import { useNavigate } from 'react-router-dom';
+
 
 function Copyright(props) {
   return (
@@ -26,15 +29,38 @@ function Copyright(props) {
 }
 
 export default function Register() {
-
-    const [value, setValue] = useState(null);
-
-
-
+    const [value, setValue] = React.useState(null);
+    let navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
+
+        //Récupère les infos de mon formulaire
+        const lastName = event.target.lastName.value;
+        const firstName = event.target.firstName.value;
+        const pseudo = event.target.pseudo.value;
+        const email = event.target.email.value;
+        const password = event.target.password.value;
+        const password_comfirm = event.target.password_comfirm.value;
+
+        const dateNaissance = new Date(value); //Besoin de gérer ça différement
+        const birthDate = dateNaissance.getFullYear() + '-' + (dateNaissance.getMonth() + 1) + '-' + dateNaissance.getDate();
+
+        //Verif MdP
+        if (password !== password_comfirm) {
+            alert("Les MdP sont différents !");
+            return;
+        }else{
+            authService.register(lastName, firstName, pseudo, birthDate, email, password).then(() => {
+                //Si ça marche
+            }).catch((error) => {
+                //Si j'ai une erreur
+                //Directus me retourne une erreur si j'ai déjà utilisé mon adressse mail
+                alert("L'adresse mail déjà utilisé !");
+            });
+
+        }
+
     };
 
   return (
@@ -62,7 +88,6 @@ export default function Register() {
                     label="Nom"
                     name="lastName"
                     autoComplete="family-name"
-
                 />
                 </Grid>
                 <Grid item xs={6} sm={6}>
@@ -90,6 +115,7 @@ export default function Register() {
                         <DatePicker
                             label="Date de Naissance"
                             value={value}
+                            name="birthday"
                             onChange={(newValue) => {
                             setValue(newValue);
                             }}
@@ -122,10 +148,10 @@ export default function Register() {
                 <TextField
                     required
                     fullWidth
-                    name="password-comfirm"
+                    name="password_comfirm"
                     label="Confirmation Mot de passe"
                     type="password"
-                    id="password-comfirm"
+                    id="password_comfirm"
                     autoComplete="new-password"
                 />
                 </Grid>
