@@ -42,34 +42,37 @@ export default function Chat () {
             console.log("Error : No Current User find")
         })
 
-        await usersService.getUsers(currentId)    
+        await usersService.getUsers(currentId, formData.search)    
         .then((res) => {
-            //Si ça marche
             // console.log("resultat users : ", res);
             table = res.data
             return table
         })
         .finally((f) => {
-            //Ce lance quoi qu'il arrive
             setAllUser(table)
         })
         .catch((e) => {
-            //Si on a une erreur
             console.log("ECHEC")
             return "ERROR";
         });
     };
- 
-    useEffect(() => {
+    
+         
+    useEffect(() => { // Ne se lance qu'au démarrage
         ChargementPage()
     }, [])
     
     // {2} : Function utilisant {1} à chaque écriture dans la Search Bar
-    const QdGChange = async () => {
-        setResearch() ;
-    }
+    const [formData, setFormData] = useState({
+        search: '',
+    });
 
+        
+    useEffect(() => { // Se lance lorsque formData est modifié
+        ChargementPage()
+    }, [formData])
     
+    const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value })    
     
 
     return (
@@ -78,7 +81,7 @@ export default function Chat () {
             {/* Title  */}
             <Grid container>
                 <Grid item xs={12} >
-                    <Typography variant="h5" className="header-message">Chat {research}</Typography>
+                    <Typography variant="h5" className="header-message">Chat</Typography>
                 </Grid>
             </Grid>
             {/* Title  -- END --*/}
@@ -99,7 +102,14 @@ export default function Chat () {
                     {/* Search Bar */}
                     <Divider />
                         <Grid item xs={12} style={{padding: '10px'}}>
-                            <TextField id="SearchBar_Users" label="Search" variant="outlined" fullWidth onChange={QdGChange()} />
+                            <TextField 
+                                id="SearchBar_Users" 
+                                label="Search" 
+                                variant="outlined" 
+                                name="search" fullWidth 
+                                value={formData.search} 
+                                onChange={(e) => onChange(e)} 
+                            />
                         </Grid>
                     <Divider />
                     {/* Search Bar -- END -- */}
@@ -114,7 +124,7 @@ export default function Chat () {
                                         <ListItemIcon>
                                             <Avatar alt={user.first_name} src={"http://squirel.kilian-marmilliot.com:8055/assets/" + user.avatar} />
                                         </ListItemIcon>
-                                        <ListItemText primary={user.first_name + " " + (user.last_name?user.last_name:" ")}></ListItemText>
+                                        <ListItemText primary={user.first_name + " " + (user.last_name?user.last_name:" ")} ></ListItemText>
                                     </ListItem>
                                 </List>
                             </>);
