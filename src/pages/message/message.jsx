@@ -45,6 +45,15 @@ const Chat = () => {
                     </Grid>
                     <Divider />
                     <List>
+                    
+                    <ListItem button key="RemySharp">
+                            <ListItemIcon>
+                                <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
+                            </ListItemIcon>
+                            <ListItemText primary="Remy Sharp">Remy Sharp</ListItemText>
+                            <ListItemText secondary="online" align="right"></ListItemText>
+                    </ListItem>
+                        {/* 
                         <ListItem button key="RemySharp">
                             <ListItemIcon>
                                 <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
@@ -63,6 +72,11 @@ const Chat = () => {
                                 <Avatar alt="Cindy Baker" src="https://material-ui.com/static/images/avatar/2.jpg" />
                             </ListItemIcon>
                             <ListItemText primary="Cindy Baker">Cindy Baker</ListItemText>
+                        </ListItem>
+                        */}
+
+                        <ListItem>
+                            
                         </ListItem>
                     </List>
                 </Grid>

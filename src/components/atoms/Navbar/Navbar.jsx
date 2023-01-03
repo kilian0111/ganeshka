@@ -148,6 +148,17 @@ export const Navbar = () => {
                                     Inscription
                                 </Link>
                             </ListItem>
+                            <ListItem>
+                                <Link 
+                                    className={styles.link} 
+                                    color='textPrimary' 
+                                    variant="button" 
+                                    underline='none' 
+                                    href="/messages"
+                                >
+                                    Messagerie
+                                </Link>
+                            </ListItem>
                         </>
                     )}
                 </List>
