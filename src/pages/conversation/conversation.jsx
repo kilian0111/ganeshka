@@ -6,13 +6,28 @@ import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
 import {AiOutlineSend} from "react-icons/ai";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Avatar from "@mui/material/Avatar";
+import { useDispatch, useSelector } from "react-redux";
+import { getPrivateMessage } from "../../slices/privatemessage";
+import { clearMessage } from "../../slices/printError";
+import { getUserAuth } from "../../slices/user";
 
 const Conversation = () => {
+    const user = useSelector((state) => state.users.me);
+    const token = useSelector((state) => state.auth.token);
+    const { privateMessage } = useSelector((state) => state);
 
-    return (
+    const dispatch = useDispatch();
+
+    console.log("PrivateMessage", privateMessage.message);
+    console.log('User', user)
+    useEffect(() => {
+        dispatch(getUserAuth({ token:token}));
+        dispatch(getPrivateMessage());
+    }, []);
+    return (    
         <div>
             <Grid item xs={12}>
                 <List>
@@ -29,46 +44,38 @@ const Conversation = () => {
                 }}>
                     <ListItem key="1">
                         <Grid container>
-                            <Grid item xs={12}>
-                                <ListItemText style={{ display:"",backgroundColor: 'red'}} align="right" primary="Hey man, What's up ?"></ListItemText>
+                            {privateMessage.message?.map((message, key) => (
+                                <>
+                                    {message.user_created.id === user.id ? (
+                                        <>
+                                            <Grid item xs={12}>
+                                                <ListItemText key={message} style={{ backgroundColor: 'red'}} align="right" primary={message.content_pm}></ListItemText>
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <ListItemText align="right" secondary={(new Date(message.date_created)).toLocaleTimeString()}></ListItemText>
+                                            </Grid>
+                                        </>
+                                    ):(
+                                        <>
+                                            <Grid item xs={12}>
+                                                <ListItemText style={{ backgroundColor: 'grey'}} align="left" primary={message.content_pm}></ListItemText>
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <ListItemText align="right" secondary={(new Date(message.date_created)).toLocaleTimeString()}></ListItemText>
+                                            </Grid>
+                                        </>
+                                    )}
+                                </>
+                            ))}
                             </Grid>
-                            <Grid item xs={12}>
-                                <ListItemText align="right" secondary="09:30"></ListItemText>
-                            </Grid>
-                        </Grid>
-                    </ListItem>
-                    <ListItem key="2">
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <ListItemText align="left" primary="Hey, Iam Good! What about you ?"></ListItemText>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <div className="talk-bubble tri-right round right-in">
-                                    <div className="talktext">
-                                        <p>Moving our way back up the right side indented. Uses .round and .right-in</p>
-                                    </div>
-                                </div>
-                                <ListItemText align="left" secondary="09:31"></ListItemText>
-                            </Grid>
-                        </Grid>
-                    </ListItem>
-                    <ListItem key="3">
-                        <Grid container>
-                            <Grid item xs={12}>
-                                <ListItemText align="right" primary="Cool. i am good, let's catch up!"></ListItemText>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <ListItemText align="right" secondary="10:30"></ListItemText>
-                            </Grid>
-                        </Grid>
                     </ListItem>
                 </List>
                 <Divider />
-                <Grid container style={{padding: '20px'}}>
-                    <Grid item xs={11}>
+                <Grid container style={{padding: '5px'}}>
+                    <Grid item xs={10}>
                         <TextField id="outlined-basic-email" label="Type Something" fullWidth />
                     </Grid>
-                    <Grid xs={1} align="right">
+                    <Grid xs={2} align="right">
                         <Fab color="primary" aria-label="add"><AiOutlineSend /></Fab>
                     </Grid>
                 </Grid>
