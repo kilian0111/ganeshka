@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { setMessage } from "./message";
+import { setMessage } from "./printError";
 import postService from "../services/post.service";
 
 const token = localStorage.getItem("access_token");

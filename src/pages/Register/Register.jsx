@@ -11,7 +11,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Logo } from '../../components/atoms/Logo/Logo';
-import { useState } from 'react';
 
 import authService from '../../services/auth.service';
 import { useNavigate } from 'react-router-dom';

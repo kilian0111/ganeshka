@@ -14,7 +14,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { clearMessage } from '../../slices/message';
+import { clearMessage } from '../../slices/printError';
 import { login } from '../../slices/auth';
 import {getUserAuth} from "../../slices/user";
 
