@@ -4,11 +4,16 @@ import api from '../config/api';
 const API_URL = config.API_URL + "auth/";
 
 // Enregistre l'utilisateur
-const register = (username, email, password) => {
-  return api.post(API_URL + "signup", {
-    username,
-    email,
-    password,
+const register = (lastName, firstName, pseudo, birthDate, email, password) => {
+  return api.post(API_URL + "users", {
+    // Nom_colonne : $variable,
+    last_name : lastName,
+    first_name : firstName,
+    pseudo : pseudo,
+    birthDate : birthDate,
+    email : email,
+    password : password,
+    role : "36a16160-8828-438a-892c-3fe2ec572ab9"
   });
 };
 

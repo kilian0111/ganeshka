@@ -1,16 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setMessage } from "./printError";
-import usersService from "../services/user.service";
+import postService from "../services/post.service";
 
+const token = localStorage.getItem("access_token");
 
-export const getUserAuth = createAsyncThunk(
-    "users/me",
-    async (thunkAPI) => {
+export const getPost = createAsyncThunk(
+    "posts/me",
+    async ({ token }, thunkAPI) => {
         try {
-            const response = await usersService.getUserAuth();
+            const response = await postService.getAllPost(token);
             thunkAPI.dispatch(setMessage(response.data.message));
 
-            return response.data;
+            return response;
+
         } catch (error) {
             const message =
                 (error.response &&
@@ -25,25 +27,20 @@ export const getUserAuth = createAsyncThunk(
 );
 
 
-
-const usersSlice = createSlice({
-    name: "users",
-    initialState:{},
+const postsSlice = createSlice({
+    name: "posts",
+    initialState: null,
     extraReducers: {
-        [getUserAuth.rejected]: (state, action) => {
-            state = null;
-            return state;
-        },
-        [getUserAuth.fulfilled]: (state, action) => {
+        [getPost.fulfilled]: (state, action) => {
             state = action.payload;
-            return state;
+            return state
         },
-        [getUserAuth.rejected]: (state, action) => {
+        [getPost.rejected]: (state, action) => {
             state = null;
-            return state;
+            return state
         },
     },
 });
 
-const { reducer } = usersSlice ;
-export default reducer;
+const { reducer } = postsSlice ;
+export default reducer;

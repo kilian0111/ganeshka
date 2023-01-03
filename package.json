@@ -24,7 +24,7 @@
     "react-icons": "^4.6.0",
     "react-placeholder-loading": "^0.5.30",
     "react-redux": "^8.0.5",
-    "react-router-dom": "^6.4.5",
+    "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
     "storybook-addon-styled-component-theme": "^2.0.0",
     "styled-components": "^5.3.6",

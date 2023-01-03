@@ -1,9 +1,12 @@
 import React from 'react'
 import {useDispatch, useSelector} from 'react-redux';
 import {PostCard} from '../../components/molecules/PostCard'
-import usersService from '../../services/user.service';
 import {getUserAuth} from "../../slices/user";
+import {getPost} from "../../slices/post";
 import {useEffect} from "react";
+import { Navigate, useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+
 const fakeData = ({
 
   1: {
@@ -46,24 +49,45 @@ const fakeData = ({
 
 export const Home = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.usersSlice);
+  const user = useSelector((state) => state.users.me);
   const token = useSelector((state) => state.auth.token);
+  const posts = useSelector((state) => state.posts)
+
   useEffect(() => {
     dispatch(getUserAuth({ token:token}));
+    dispatch(getPost({ token:token}));
   }, []);
+
+  const navigate = useNavigate();
+  
+  const redirectCreatePost = () => {
+    navigate('/createPost');
+  }
+
+  const card = () => {
+    if(posts){
+      return (
+        <div>
+        {Object.keys(posts.data).map((key, index) =>  {
+          return (
+            <PostCard key={index} user={posts.data[key].user_created} title={posts.data[key].title_post} desc={posts.data[key].content_post}/>
+          )
+        })}
+      </div>
+      )
+    }
+    return 'null'
+  }
 
 
 
   return (
     <div>
       <div> Fil d'actualité</div>
-      <div>
-        {Object.keys(fakeData).map((key, index) =>  {
-          return (
-            <PostCard key={index} user={fakeData[key].user} title={fakeData[key].title} desc={fakeData[key].desc}/>
-          )
-        })}
-      </div>
+      <Button variant="contained" onClick={redirectCreatePost} >Créer un Post</Button>
+
+      {card()}
+
     </div>
   )
 }
