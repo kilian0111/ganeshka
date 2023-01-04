@@ -6,7 +6,7 @@ const API_URL_LIKE = config.API_URL + "items/junction_directus_users_post";
 
 
 const getAllPost = async () => {
-    const response = await api.get(API_URL + '?fields=*,user_created.*' );
+    const response = await api.get(API_URL + '?fields=*,user_created.*&sort=-id' );
     return response.data;
 };
 
