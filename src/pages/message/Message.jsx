@@ -12,6 +12,7 @@ import Avatar from '@mui/material/Avatar';
 import Config from '../../config';
 import API from '../../config/api';
 import usersService from '../../services/user.service';
+import privateCallService from'../../services/privateCall.service';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -55,6 +56,8 @@ export default function Chat () {
             console.log("ECHEC")
             return "ERROR";
         });
+
+        await privateCallService.getConversation(currentId)
     };
     
          
