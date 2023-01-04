@@ -61,7 +61,6 @@ const Conversation = () => {
 
     const sendMessage = async (e) => {
         e.preventDefault();
-        console.log(formData);
         if(!user) {
             navigate("/login");
         }
@@ -72,7 +71,6 @@ const Conversation = () => {
     
             let formDataCopy = {...formData}
             formDataCopy.user_created = user;
-            console.log(formDataCopy);
             dispatch(addMessage(formDataCopy))
 
             navigate("/conversation/" + id_privateCall);

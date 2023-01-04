@@ -29,7 +29,6 @@ const privateMessageSlice = createSlice({
     initialState: {message: null},
     reducers: {
         addMessage: (state, action) => {
-            console.log('gdfksljdf',action.payload);
             state.message.push(action.payload);
             return state
         }
