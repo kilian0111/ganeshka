@@ -1,0 +1,39 @@
+.flex-end{
+    justify-content: flex-end;
+}
+
+.containerMessage{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.containerMessage{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.flex-start .containerMessage{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.message{
+    border-radius: 50px;
+    filter: drop-shadow(0 0 0.25rem rgb(216, 216, 216));
+    padding: 5px;
+}
+
+.message span{
+    margin: 2px;
+}
+
+.scroll{
+    overflow-y: scroll;
+    height: 70vh;
+}
