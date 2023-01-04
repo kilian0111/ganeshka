@@ -27,18 +27,18 @@ export const getUserAuth = createAsyncThunk(
 
 const usersSlice = createSlice({
     name: "users",
-    initialState:{},
+    initialState:{ me: null, listUsers:null},
     extraReducers: {
         [getUserAuth.rejected]: (state, action) => {
-            state = null;
+            state.me = null;
             return state;
         },
         [getUserAuth.fulfilled]: (state, action) => {
-            state = action.payload;
+            state.me = action.payload;
             return state;
         },
         [getUserAuth.rejected]: (state, action) => {
-            state = null;
+            state.me = null;
             return state;
         },
     },
