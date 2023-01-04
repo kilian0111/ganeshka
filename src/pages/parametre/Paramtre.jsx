@@ -141,7 +141,7 @@ const UserProfile = () => {
                     {formData.avatar && (
                     <Grid container align="center" justify="center" item xs={3} md={12}  style={{flexDirection:"column-reverse"}} >
                         <div>
-                            <Avatar  src={config.API_URL + "assets/" + formData.avatar} ></Avatar>
+                            <Avatar src={config.API_URL + "assets/" + formData.avatar} ></Avatar>
                         </div>
                     </Grid>
                     )}

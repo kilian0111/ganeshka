@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import {  useState} from 'react';
 import {getUserAuth} from "../../slices/user";
 import { useDispatch } from 'react-redux';
 import postService from "../../services/post.service";
@@ -15,23 +15,23 @@ import Grid from '@mui/material/Grid';
 import Avatar from "@mui/material/Avatar";
 import Box from '@mui/material/Box';
 
-export function PostCard({ user, id, title, desc , file, ...props}) {
+export function PostCard({ user, id, title, desc, countLike, file, ...props}) {
   const dispatch = useDispatch();
   const me = useSelector((state) => state.users.me);
   const token = useSelector((state) => state.auth.token);
-
   const colorLike = me?.like?.find(mee => mee['post_id'] === id) ? 'error' : 'default';
-
+  const [likeNumber, setLikeNumber] = useState(countLike);
+  
+  
   const likeAction = async () => {
-
     if(colorLike === 'error') {
       await postService.unlikePost( me?.like?.find(mee => mee['post_id'] === id)?.id );
+      setLikeNumber(likeNumber - 1);
     } else {
       await postService.likePost( id,  me.id );
+      setLikeNumber(likeNumber + 1);
     } 
-
     dispatch(getUserAuth({ token:token}));
-
   }
 
   return (
@@ -69,9 +69,14 @@ export function PostCard({ user, id, title, desc , file, ...props}) {
           )}
       </CardContent>
       <CardActions onClick={likeAction} disableSpacing sx={{ justifyContent : 'end' }}>
-        <IconButton color={colorLike}>
-          <FavoriteIcon />
-        </IconButton>
+        <Box sx={{display: 'flex', alignItems: 'center'}}>
+          <Typography variant="body2">
+              {likeNumber}
+          </Typography>
+          <IconButton color={colorLike}>
+            <FavoriteIcon />
+          </IconButton>
+        </Box>
       </CardActions>
     </Card>
   );
