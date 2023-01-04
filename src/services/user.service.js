@@ -13,19 +13,16 @@ const getUserAuth = async () => {
 // récupère les utilisateurs actif
 const getUsers = async (currentId, searchName) => {
     let requette;
-
     if(searchName == ''){
-        requette = "?filter[status]=active";
+        requette = `?filter={"_and":[{"status":{"_eq":"active"}},{"id":{"_neq":"${currentId}"}}]}`;
     }else{
-        requette = `?filter={"first_name":{"_contains":"${searchName}"}}`;
+        requette = `?filter={"_or":[{"_and":[{"first_name":{"_contains":"${searchName}"}},{"status":{"_eq":"active"}},{"id":{"_neq":"${currentId}"}}]},{"_and":[{"last_name":{"_contains":"${searchName}"}},{"status":{"_eq":"active"}},{"id":{"_neq":"${currentId}"}}]}]}`;
     };
     const response = await api.get(API_URL + requette);
-    console.log(API_URL + requette)
+    //  console.log(API_URL + requette)
     return response.data;
 }
 
-// fonctionne : filter[status]=active         recherche que les utilisateur active
-// [first_name][like]=${searchName}
 const usersService = {
     getUserAuth,
     getUsers, 
