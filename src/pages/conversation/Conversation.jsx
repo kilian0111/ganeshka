@@ -17,6 +17,7 @@ import './Conversation.css'
 import { Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import privateMessageService from "../../services/privateMessage.service";
+import './Conversation.css'
 
 
 const Conversation = () => {
@@ -61,6 +62,7 @@ const Conversation = () => {
 
     const sendMessage = async (e) => {
         e.preventDefault();
+        setFormData({...formData, content_pm: ''})
         if(!user) {
             navigate("/login");
         }
@@ -124,7 +126,7 @@ const Conversation = () => {
                 <Box component="form" onSubmit={sendMessage} noValidate sx={{ mt: 1 }}>
                     <Grid container style={{padding: '5px'}}>
                         <Grid item xs={10}>
-                            <TextField id="outlined-basic-email" name="content_pm" label="Type Something" fullWidth onChange={(e) => onChange(e)} />
+                            <TextField id="outlined-basic-email" name="content_pm" value={formData.content_pm} label="Type Something" fullWidth onChange={(e) => onChange(e)} />
                         </Grid>
                         <Grid xs={2} align="right">
                             <Fab type="submit" color="primary" aria-label="add"><AiOutlineSend /></Fab>
