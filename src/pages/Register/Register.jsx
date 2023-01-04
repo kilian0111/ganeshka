@@ -52,6 +52,7 @@ export default function Register() {
             return;
         }else{
             authService.register(lastName, firstName, pseudo, birthDate, email, password).then(() => {
+                navigate('/login');
                 //Si ça marche
             }).catch((error) => {
                 //Si j'ai une erreur

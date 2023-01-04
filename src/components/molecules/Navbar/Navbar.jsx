@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@mui/styles';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,6 +14,8 @@ import Avatar from "@mui/material/Avatar";
 import { deleteToken } from "../../../slices/auth";
 import {useNavigate} from "react-router-dom";
 import {Logo} from "../../atoms/Logo/Logo";
+import {getUserAuth} from "../../../slices/user";
+import config from '../../../config/index';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,13 +30,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Navbar = () => {
+    const userMe = useSelector((state) =>   state.users.me);
     const classes = useStyles();
-
-    const [open, setOpen] = React.useState(false);
-
     const { isLoggedIn } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     let navigate = useNavigate()
+
+
+    useEffect(() => {
+        dispatch(getUserAuth());
+    },[]);
+
+    const [open, setOpen] = React.useState(false);
+
+
 
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -74,7 +83,11 @@ export const Navbar = () => {
                     <Typography variant="h6" className={classes.title}>
                         Squirrel
                     </Typography>
-                    <Logo png={true} width={50} onClick={ () => { navigate("/"); }} />
+                    {
+                        userMe != null && userMe.avatar != null && userMe.avatar !== ""
+                            ? <Avatar alt={userMe.first_name} src={config.API_URL + "assets/" + userMe.avatar} />
+                            : <Logo png={true} width={50} onClick={ () => { navigate("/"); }} />
+                    }
                 </Toolbar>
             </AppBar>
             <Drawer anchor="left" open={open} onClose={toggleDrawer(false)}>

@@ -1,14 +1,13 @@
 import config from '../config';
 import api from '../config/api';
 
-const API_URL = config.API_URL + "auth/";
+const API_URL = config.API_URL + "";
 
 const register = (lastName, firstName, pseudo, birthDate, email, password) => {
   return api.post(API_URL + "users", {
     // Nom_colonne : $variable,
     last_name : lastName,
     first_name : firstName,
-    pseudo : pseudo,
     birthDate : birthDate,
     email : email,
     password : password,
@@ -18,7 +17,7 @@ const register = (lastName, firstName, pseudo, birthDate, email, password) => {
 
 const login = (email, password) => {
   return api
-    .post(API_URL + "login", {
+    .post(API_URL + "auth/login", {
       email,
       password,
     })

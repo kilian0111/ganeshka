@@ -14,8 +14,6 @@ import { useEffect } from 'react';
 import {getUserAuth} from "../../slices/user";
 import { useDispatch } from 'react-redux';
 
-
-
 export default function CreatePost() {
 const dispatch = useDispatch();
 let navigate = useNavigate();
@@ -37,7 +35,6 @@ const [formData, setFormData] = useState({
     if(!user) {
         navigate("/login");
     }
-    
     
     const response = await postService.postPost(formData);
 

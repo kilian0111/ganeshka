@@ -9,7 +9,7 @@ export const getPost = createAsyncThunk(
     async ({ token }, thunkAPI) => {
         try {
             const response = await postService.getAllPost(token);
-            thunkAPI.dispatch(setMessage(response.data.message));
+            //thunkAPI.dispatch(setMessage(response.data.message));
 
             return response;
 
@@ -20,7 +20,7 @@ export const getPost = createAsyncThunk(
                     error.response.data.message) ||
                 error.message ||
                 error.toString();
-            thunkAPI.dispatch(setMessage(message));
+            //thunkAPI.dispatch(setMessage(message));
             return thunkAPI.rejectWithValue();
         }
     }
