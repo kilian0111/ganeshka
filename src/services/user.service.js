@@ -3,7 +3,6 @@ import api from '../config/api';
 
 const API_URL = config.API_URL + "users/";
 
-
 const getUserAuth = async () => {
     const response = await api.get(API_URL + "me?fields=*,like.*")
 
