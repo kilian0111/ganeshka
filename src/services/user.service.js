@@ -5,7 +5,7 @@ const API_URL = config.API_URL + "users/";
 
 
 const getUserAuth = async () => {
-    const response = await api.get(API_URL + "me")
+    const response = await api.get(API_URL + "me?fields=*,like.*")
 
     return response.data;
 };
