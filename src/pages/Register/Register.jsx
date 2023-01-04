@@ -7,9 +7,6 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Logo } from '../../components/atoms/Logo/Logo';
 
 import authService from '../../services/auth.service';
@@ -29,31 +26,31 @@ function Copyright(props) {
 }
 
 export default function Register() {
-    const [value, setValue] = React.useState(null);
+
+    const [formData, setFormData] = React.useState({
+        first_name: "",
+        last_name: "",
+        email: "",
+        password: "",
+        password_comfirm: "",
+        pseudo:""
+    });
+
+    const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
     let navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        //Récupère les infos de mon formulaire
-        const lastName = event.target.lastName.value;
-        const firstName = event.target.firstName.value;
-        const pseudo = event.target.pseudo.value;
-        const email = event.target.email.value;
-        const password = event.target.password.value;
-        const password_comfirm = event.target.password_comfirm.value;
-
-        const dateNaissance = new Date(value); //Besoin de gérer ça différement
-        const birthDate = dateNaissance.getFullYear() + '-' + (dateNaissance.getMonth() + 1) + '-' + dateNaissance.getDate();
-
         //Verif MdP
-        if (password !== password_comfirm) {
+        if (formData.password !== formData.password_comfirm) {
             alert("Les MdP sont différents !");
-            return;
         }else{
-            authService.register(lastName, firstName, pseudo, birthDate, email, password).then(() => {
+            authService.register(formData.last_name, formData.first_name,
+                formData.pseudo, formData.email, formData.password).then(() => {
                 navigate('/login');
-                //Si ça marche
+
             }).catch((error) => {
                 //Si j'ai une erreur
                 //Directus me retourne une erreur si j'ai déjà utilisé mon adressse mail
@@ -85,44 +82,37 @@ export default function Register() {
                 <TextField
                     required
                     fullWidth
-                    id="lastName"
+                    id="last_name"
                     label="Nom"
-                    name="lastName"
+                    name="last_name"
                     autoComplete="family-name"
+                    value={formData.last_name}
+                    onChange={(e) => onChange(e)}
                 />
                 </Grid>
                 <Grid item xs={6} sm={6}>
                 <TextField
                     autoComplete="given-name"
-                    name="firstName"
+                    name="first_name"
                     required
                     fullWidth
-                    id="firstName"
+                    id="first_name"
                     label="Prénom"
                     autoFocus
+                    value={formData.first_name}
+                    onChange={(e) => onChange(e)}
                 />
                 </Grid>
-                <Grid item xs={6} sm={6}>
+                <Grid item xs={12} sm={12}>
                     <TextField
                         required
                         fullWidth
                         id="pseudo"
                         label="Pseudo"
                         name="pseudo"
+                        value={formData.pseudo}
+                        onChange={(e) => onChange(e)}
                     />
-                </Grid>
-                <Grid item xs={6} sm={6}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                            label="Date de Naissance"
-                            value={value}
-                            name="birthday"
-                            onChange={(newValue) => {
-                            setValue(newValue);
-                            }}
-                            renderInput={(params) => <TextField {...params} />}
-                        />
-                    </LocalizationProvider>
                 </Grid>
                 <Grid item xs={12}>
                 <TextField
@@ -132,6 +122,8 @@ export default function Register() {
                     label="Email"
                     name="email"
                     autoComplete="email"
+                    value={formData.email}
+                    onChange={(e) => onChange(e)}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -143,6 +135,8 @@ export default function Register() {
                     type="password"
                     id="password"
                     autoComplete="new-password"
+                    value={formData.password}
+                    onChange={(e) => onChange(e)}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -154,6 +148,8 @@ export default function Register() {
                     type="password"
                     id="password_comfirm"
                     autoComplete="new-password"
+                    value={formData.password_comfirm}
+                    onChange={(e) => onChange(e)}
                 />
                 </Grid>
             </Grid>

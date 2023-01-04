@@ -1,14 +1,13 @@
 import config from '../config';
 import api from '../config/api';
 
-const API_URL = config.API_URL + "";
+const API_URL = config.API_URL;
 
-const register = (lastName, firstName, pseudo, birthDate, email, password) => {
+const register = (lastName, firstName, pseudo, email, password) => {
   return api.post(API_URL + "users", {
     // Nom_colonne : $variable,
     last_name : lastName,
     first_name : firstName,
-    birthDate : birthDate,
     email : email,
     password : password,
     role : "36a16160-8828-438a-892c-3fe2ec572ab9"
