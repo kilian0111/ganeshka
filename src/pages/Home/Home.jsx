@@ -70,7 +70,7 @@ export const Home = () => {
         <div>
         {Object.keys(posts.data).map((key, index) =>  {
           return (
-            <PostCard key={index} user={posts.data[key].user_created} title={posts.data[key].title_post} desc={posts.data[key].content_post}/>
+            <PostCard key={index} countLike={posts.data[key].like.length} id={posts.data[key].id} user={posts.data[key].user_created} title={posts.data[key].title_post} desc={posts.data[key].content_post} file={posts.data[key].file}/>
           )
         })}
       </div>

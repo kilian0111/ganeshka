@@ -9,7 +9,7 @@ import store from './store/store'
 import  Login  from './pages/Login/Login';
 import  Register  from './pages/Register/Register';
 import Chat from './pages/message/Message';
-import Conversation from './pages/conversation/conversation';
+import Conversation from './pages/conversation/Conversation';
 import { Navbar } from './components/molecules/Navbar/Navbar';
 import { ThemeProvider } from "@mui/material/styles";
 import createTheme from './themes/default.js'
@@ -30,7 +30,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/messages" element={<Chat />} />
-            <Route path="/conversation" element={<Conversation />} />
+            <Route path="/conversation/:id" element={<Conversation />} />
             <Route path="/parametre" element={<UserProfile />} />
           </Routes>
         </div>

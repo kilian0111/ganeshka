@@ -8,8 +8,7 @@ export const getUserAuth = createAsyncThunk(
     async (thunkAPI) => {
         try {
             const response = await usersService.getUserAuth();
-            thunkAPI.dispatch(setMessage(response.data.message));
-
+            //thunkAPI.dispatch(setMessage(response.data.message));
             return response.data;
         } catch (error) {
             const message =
@@ -18,7 +17,7 @@ export const getUserAuth = createAsyncThunk(
                     error.response.data.message) ||
                 error.message ||
                 error.toString();
-            thunkAPI.dispatch(setMessage(message));
+            //thunkAPI.dispatch(setMessage(message));
             return thunkAPI.rejectWithValue();
         }
     }

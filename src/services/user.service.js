@@ -5,10 +5,20 @@ const API_URL = config.API_URL + "users";
 
 // récupère l'utilisateur courant      Auth => Authentificate
 const getUserAuth = async () => {
-    const response = await api.get(API_URL + "/me")
+    const response = await api.get(API_URL + "/me?fields=*,like.*")
 
     return response.data;
 };
+
+const updateUser = async (data) => {
+    const response = await api.patch(API_URL + "/me", data)
+    return response.data;
+}
+
+const deleteUser = async (id) => {
+    const response = await api.delete(API_URL  + "/" + id)
+    return response.data;
+}
 
 // récupère les utilisateurs actif
 const getUsers = async (currentId, searchName) => {
@@ -25,7 +35,9 @@ const getUsers = async (currentId, searchName) => {
 
 const usersService = {
     getUserAuth,
-    getUsers, 
+    getUsers,
+    updateUser,
+    deleteUser
 };
 
 

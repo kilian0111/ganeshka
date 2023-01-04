@@ -1,16 +1,13 @@
 import config from '../config';
 import api from '../config/api';
 
-const API_URL = config.API_URL + "auth/";
-
+const API_URL = config.API_URL;
 // Enregistre l'utilisateur
-const register = (lastName, firstName, pseudo, birthDate, email, password) => {
+const register = (lastName, firstName, pseudo, email, password) => {
   return api.post(API_URL + "users", {
     // Nom_colonne : $variable,
     last_name : lastName,
     first_name : firstName,
-    pseudo : pseudo,
-    birthDate : birthDate,
     email : email,
     password : password,
     role : "36a16160-8828-438a-892c-3fe2ec572ab9"
@@ -20,7 +17,7 @@ const register = (lastName, firstName, pseudo, birthDate, email, password) => {
 // Connecte l'utilisateur
 const login = (email, password) => {
   return api
-    .post(API_URL + "login", {
+    .post(API_URL + "auth/login", {
       email,
       password,
     })

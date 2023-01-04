@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import  { useRef } from 'react';
+import config from '../../config/index';
+import uploadFileService from '../../services/uploadFile.service';
+
+
 import {
     Grid,
     Typography,
     TextField,
     IconButton,
     Button,
-    Paper,
+    Paper, Input, InputLabel,
 } from '@mui/material';
 import { FaPen, FaTrash } from 'react-icons/fa';
 import {getUserAuth} from "../../slices/user";
+
+import Avatar from "@mui/material/Avatar";
+import usersService from '../../services/user.service';
+import {navigate} from "@storybook/addon-links";
 
 
 
@@ -18,7 +26,7 @@ const UserProfile = () => {
     const dispatch = useDispatch();
     const userMe = useSelector((state) =>   state.users.me);
     const token = useSelector((state) => state.auth.token);
-
+    const fileInput = useRef();
 
     const [formData, setFormData] = useState({
         first_name: "",
@@ -26,9 +34,10 @@ const UserProfile = () => {
         email: "",
         title: "",
         description: "",
+        avatar: "",
     });
     useEffect(() => {
-        dispatch(getUserAuth({ token:token}));
+        dispatch(getUserAuth());
     },[])
 
     useEffect(() => {
@@ -39,6 +48,7 @@ const UserProfile = () => {
                 email: userMe.email,
                 title: userMe.title,
                 description: userMe.description,
+                avatar: userMe.avatar,
             });
         }
     }, [userMe]);
@@ -46,13 +56,33 @@ const UserProfile = () => {
     const onChange = (e) =>
         setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
-        //dispatch(updateUser({ ...formData, id }));
+        let dataAMaj = {}
+        for (var property in formData) {
+            if (formData.hasOwnProperty(property)) {
+                if (formData[property] != null && formData[property] != "") {
+                    dataAMaj[property] = formData[property]
+                }
+            }
+        }
+        const file = fileInput.current.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('title', 'avatar' + Date.now);
+            formData.append('avatar_' + userMe?.id + "_" + Date.now(), file);
+            const res = await uploadFileService.uploadFile(formData);
+            dataAMaj.avatar = res.data;
+        }
+        await usersService.updateUser(dataAMaj);
+        dispatch(getUserAuth());
     };
 
-    const onDelete = () => {
-        //dispatch(deleteUser(id));
+    const onDelete = async () => {
+        if(userMe != null && userMe.id != null) {
+            await usersService.deleteUser(userMe.id);
+        }
+        navigate('/register');
     };
 
     return (
@@ -108,6 +138,21 @@ const UserProfile = () => {
                             onChange={(e) => onChange(e)}
                         />
                     </Grid>
+                    {formData.avatar && (
+                    <Grid container align="center" justify="center" item xs={3} md={12}  style={{flexDirection:"column-reverse"}} >
+                        <div>
+                            <Avatar src={config.API_URL + "assets/" + formData.avatar} ></Avatar>
+                        </div>
+                    </Grid>
+                    )}
+                    <Grid item xs={9} md={12} justify="center">
+                        <InputLabel htmlFor="file-input">Upload un Avatar</InputLabel>
+                        <input
+                            type="file"
+                            id="file-input"
+                            ref={fileInput}
+                        />
+                    </Grid>
                     <Grid item xs={12}>
                         <Button
                             type="submit"
@@ -117,21 +162,8 @@ const UserProfile = () => {
                         >
                             Update
                         </Button>
-                        <input
-                            accept="image/*"
-                            id="avatar-input"
-                            type="file"
-                            onChange={(e) => setFormData({ ...formData, avatar: e.target.files[0] })}
-                        />
-                        <label htmlFor="avatar-input">
-                            <Button component="span">
-                                Upload Avatar
-                            </Button>
-                        </label>
-                        {formData.avatar && (
-                            <Typography component="p">{formData.avatar.name}</Typography>
-                        )}
                     </Grid>
+
                     <Grid item xs={12}>
                         <IconButton aria-label="delete" onClick={onDelete}>
                             <FaTrash />
