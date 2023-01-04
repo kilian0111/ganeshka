@@ -5,9 +5,9 @@ const token = localStorage.getItem("access_token");
 
 export const getPrivateMessage = createAsyncThunk(
     "privateMessage",
-    async (thunkAPI) => {
+    async (id_privateCall, thunkAPI) => {
         try {
-            const response = await privateMessageService.getAllPrivateMessage();
+            const response = await privateMessageService.getAllPrivateMessage(id_privateCall);
 
             return response.data;
 
@@ -27,6 +27,13 @@ export const getPrivateMessage = createAsyncThunk(
 const privateMessageSlice = createSlice({
     name: "privateMessage",
     initialState: {message: null},
+    reducers: {
+        addMessage: (state, action) => {
+            console.log('gdfksljdf',action.payload);
+            state.message.push(action.payload);
+            return state
+        }
+    },
     extraReducers: {
         [getPrivateMessage.fulfilled]: (state, action) => {
             state.message = action.payload;
@@ -39,5 +46,6 @@ const privateMessageSlice = createSlice({
     },
 });
 
+export const { addMessage } = privateMessageSlice.actions;
 const { reducer } = privateMessageSlice ;
 export default reducer;

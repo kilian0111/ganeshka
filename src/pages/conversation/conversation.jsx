@@ -10,12 +10,12 @@ import React, { useEffect, useState } from "react";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Avatar from "@mui/material/Avatar";
 import { useDispatch, useSelector } from "react-redux";
-import { getPrivateMessage } from "../../slices/privatemessage";
+import { addMessage, getPrivateMessage } from "../../slices/privatemessage";
 import { getUserAuth } from "../../slices/user";
 import { useTheme } from "@mui/material/styles";
 import './Conversation.css'
 import { Box } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import privateMessageService from "../../services/privateMessage.service";
 
 
@@ -23,22 +23,39 @@ const Conversation = () => {
     const theme = useTheme();
     let navigate = useNavigate();
 
+    // Get id from url
+    const { id } = useParams();
+
     const user = useSelector((state) => state.users.me);
     const { privateMessage } = useSelector((state) => state);
+    const id_privateCall = parseInt(id);
 
+    // Get current date
+    var date = new Date().toISOString().split('T')[0];
+    var time = new Date().toTimeString().split(' ')[0];
+   
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getUserAuth());
-        dispatch(getPrivateMessage());
+        dispatch(getPrivateMessage(id_privateCall));
     }, []);
 
+    
     const [formData, setFormData] = useState({
         content_pm: '',
+        date_created: date + " " + time,
+        date_updated: date + " " + time,
         status: 'published',
-        id_privateCall: 9,
-        user_created: user?.id || "27f6d091-d0ad-4758-a73d-29027f12f1d4",
+        id_privateCall: id_privateCall,
+        user_created: user?.id || null,
     });
+    
+    useEffect(() => {
+        const formDataCopy = {...formData}
+        formDataCopy.user_created = user?.id || null;
+        setFormData(formDataCopy);
+    }, [user]);
     
     const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -52,7 +69,13 @@ const Conversation = () => {
         const response = await privateMessageService.postPrivateMessage(formData);
 
         if (response.status === 200) {
-            navigate("/conversation/1");
+    
+            let formDataCopy = {...formData}
+            formDataCopy.user_created = user;
+            console.log(formDataCopy);
+            dispatch(addMessage(formDataCopy))
+
+            navigate("/conversation/" + id_privateCall);
         }
         
       };
@@ -74,7 +97,7 @@ const Conversation = () => {
                     overflowY: 'auto',
                 }}>
                     {privateMessage.message?.map((message, key) => (
-                        <ListItem key={message.id}>
+                        <ListItem key={key}>
                             {message.user_created.id === user.id ? (
                                 <>
                                 <Grid container className="flex-end">
