@@ -18,7 +18,7 @@ import { Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import privateMessageService from "../../services/privateMessage.service";
 import "./Conversation.css";
-import { getPrivateCall } from "../../slices/privatecall";
+import { getPrivateCallById } from "../../slices/privatecall";
 
 const Conversation = () => {
   const theme = useTheme();
@@ -32,6 +32,8 @@ const Conversation = () => {
   const { privateCall } = useSelector((state) => state);
   const id_privateCall = parseInt(id);
 
+  console.log(privateCall);
+
   // Get current date
   var date = new Date().toISOString().split("T")[0];
   var time = new Date().toTimeString().split(" ")[0];
@@ -41,10 +43,9 @@ const Conversation = () => {
   useEffect(() => {
     dispatch(getUserAuth());
     dispatch(getPrivateMessage(id_privateCall));
-    dispatch(getPrivateCall(id_privateCall));
+    dispatch(getPrivateCallById(id_privateCall));
   }, []);
 
-  console.log("privateCall", privateCall);
   const [formData, setFormData] = useState({
     content_pm: "",
     date_created: date + " " + time,
@@ -85,6 +86,7 @@ const Conversation = () => {
     <div>
       <Grid item xs={12}>
         <List>
+          {privateCall?.map((call, key) => console.log(call))}
           <ListItem button key="RemySharp">
             <ListItemIcon>
               <Avatar

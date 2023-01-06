@@ -15,8 +15,16 @@ const getConversation = async (currentId) => {
 //?filtre={"nom_PrivateCall":{"_contains":"te"}}
 //?filter={"user_PrivateCall.directus_users_id":{"_eq":"${currentId}"}}
 
-const callService = {
-  getConversation,
+const getConversationById = async (id_privateCall) => {
+  const response = await api.get(
+    API_URL + "?fields=*,user_PrivateCall.*&filter[id][_eq]=" + id_privateCall
+  );
+  return response.data;
 };
 
-export default callService;
+const privateCallService = {
+  getConversation,
+  getConversationById,
+};
+
+export default privateCallService;

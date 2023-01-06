@@ -1,13 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import privateCallService from "../services/privateCall.service";
+import { setMessage } from "./printError";
 
-const token = localStorage.getItem("access_token");
-
-export const getPrivateCall = createAsyncThunk(
+export const getPrivateCallById = createAsyncThunk(
   "privateCall",
   async (id_privateCall, thunkAPI) => {
     try {
-      const response = await privateCallService.getConversation(id_privateCall);
+      const response = await privateCallService.getConversationById(
+        id_privateCall
+      );
       return response.data;
     } catch (error) {
       const message =
@@ -16,35 +17,27 @@ export const getPrivateCall = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString();
-      console.log(message);
+      // thunkAPI.dispatch(setMessage(message));
       return thunkAPI.rejectWithValue();
     }
   }
 );
-
-const privateCallSlice = createSlice({
+const privateCallByIdSlice = createSlice({
   name: "privateCall",
-  initialState: { conversation: null },
-  reducers: {
-    addConversation: (state, action) => {
-      state.conversation.push(action.payload);
-      return state;
-    },
-  },
+  initialState: null,
   extraReducers: {
-    [getPrivateCall.fulfilled]: (state, action) => {
+    [getPrivateCallById.fulfilled]: (state, action) => {
       console.log("fulfilled", state);
-      state.conversation = action.payload;
+      state.privateCall = action.payload;
       return state;
     },
-    [getPrivateCall.rejected]: (state, action) => {
+    [getPrivateCallById.rejected]: (state, action) => {
       console.log("rejected", state);
-      state.conversation = null;
+      state.privateCall = null;
       return state;
     },
   },
 });
 
-export const { addConversation } = privateCallSlice.actions;
-const { reducer } = privateCallSlice;
+const { reducer } = privateCallByIdSlice;
 export default reducer;
