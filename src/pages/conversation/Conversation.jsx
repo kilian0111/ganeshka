@@ -5,7 +5,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
-import {AiOutlineSend} from "react-icons/ai";
+import { AiOutlineSend } from "react-icons/ai";
 import React, { useEffect, useState } from "react";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Avatar from "@mui/material/Avatar";
@@ -13,128 +13,167 @@ import { useDispatch, useSelector } from "react-redux";
 import { addMessage, getPrivateMessage } from "../../slices/privatemessage";
 import { getUserAuth } from "../../slices/user";
 import { useTheme } from "@mui/material/styles";
-import './Conversation.css'
+import "./Conversation.css";
 import { Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import privateMessageService from "../../services/privateMessage.service";
-import './Conversation.css'
-
+import "./Conversation.css";
+import { getPrivateCall } from "../../slices/privatecall";
 
 const Conversation = () => {
-    const theme = useTheme();
-    let navigate = useNavigate();
+  const theme = useTheme();
+  let navigate = useNavigate();
 
-    // Get id from url
-    const { id } = useParams();
+  // Get id from url
+  const { id } = useParams();
 
-    const user = useSelector((state) => state.users.me);
-    const { privateMessage } = useSelector((state) => state);
-    const id_privateCall = parseInt(id);
+  const user = useSelector((state) => state.users.me);
+  const { privateMessage } = useSelector((state) => state);
+  const { privateCall } = useSelector((state) => state);
+  const id_privateCall = parseInt(id);
 
-    // Get current date
-    var date = new Date().toISOString().split('T')[0];
-    var time = new Date().toTimeString().split(' ')[0];
-   
-    const dispatch = useDispatch();
+  // Get current date
+  var date = new Date().toISOString().split("T")[0];
+  var time = new Date().toTimeString().split(" ")[0];
 
-    useEffect(() => {
-        dispatch(getUserAuth());
-        dispatch(getPrivateMessage(id_privateCall));
-    }, []);
+  const dispatch = useDispatch();
 
-    
-    const [formData, setFormData] = useState({
-        content_pm: '',
-        date_created: date + " " + time,
-        date_updated: date + " " + time,
-        status: 'published',
-        id_privateCall: id_privateCall,
-        user_created: user?.id || null,
-    });
-    
-    useEffect(() => {
-        const formDataCopy = {...formData}
-        formDataCopy.user_created = user?.id || null;
-        setFormData(formDataCopy);
-    }, [user]);
-    
-    const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  useEffect(() => {
+    dispatch(getUserAuth());
+    dispatch(getPrivateMessage(id_privateCall));
+    dispatch(getPrivateCall(id_privateCall));
+  }, []);
 
-    const sendMessage = async (e) => {
-        e.preventDefault();
-        setFormData({...formData, content_pm: ''})
-        if(!user) {
-            navigate("/login");
-        }
+  console.log("privateCall", privateCall);
+  const [formData, setFormData] = useState({
+    content_pm: "",
+    date_created: date + " " + time,
+    date_updated: date + " " + time,
+    status: "published",
+    id_privateCall: id_privateCall,
+    user_created: user?.id || null,
+  });
 
-        const response = await privateMessageService.postPrivateMessage(formData);
+  useEffect(() => {
+    const formDataCopy = { ...formData };
+    formDataCopy.user_created = user?.id || null;
+    setFormData(formDataCopy);
+  }, [user]);
 
-        if (response.status === 200) {
-    
-            let formDataCopy = {...formData}
-            formDataCopy.user_created = user;
-            dispatch(addMessage(formDataCopy))
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
-            navigate("/conversation/" + id_privateCall);
-        }
-        
-      };
+  const sendMessage = async (e) => {
+    e.preventDefault();
+    setFormData({ ...formData, content_pm: "" });
+    if (!user) {
+      navigate("/login");
+    }
 
-    return (    
-        <div>
-            <Grid item xs={12}>
-                <List>
-                    <ListItem button key="RemySharp">
-                        <ListItemIcon>
-                            <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-                        </ListItemIcon>
-                        <ListItemText primary="John Wick"></ListItemText>
-                    </ListItem>
-                </List>
-                <div className="scroll">
-                <List className={{
-                    height: '70vh',
-                    overflowY: 'auto',
-                }}>
-                    {privateMessage.message?.map((message, key) => (
-                        <ListItem key={key}>
-                            {message.user_created.id === user.id ? (
-                                <>
-                                <Grid container className="flex-end">
-                                    <div className="containerMessage">
-                                        <ListItemText key={message} className="message" style={{ backgroundColor: theme.palette.primary.main, color:'white' }} align="right" primary={message.content_pm}></ListItemText>
-                                        <ListItemText align="right" secondary={(new Date(message.date_created)).toLocaleTimeString()}></ListItemText>
-                                    </div>
-                                </Grid>
-                                </>
-                            ):(
-                                <>
-                                    <Grid container className="flex-start">
-                                        <div className="containerMessage">
-                                            <ListItemText key={message} className="message" style={{ backgroundColor: 'white'}} align="left" primary={message.content_pm}></ListItemText>
-                                            <ListItemText align="right" secondary={(new Date(message.date_created)).toLocaleTimeString()}></ListItemText>
-                                        </div>
-                                    </Grid>
-                                </>
-                            )}
-                            
-                        </ListItem>
-                    ))}
-                </List>
-                </div>
-                <Divider />
-                <Box component="form" onSubmit={sendMessage} noValidate sx={{ mt: 1 }}>
-                    <Grid container style={{padding: '5px'}}>
-                        <Grid item xs={10}>
-                            <TextField id="outlined-basic-email" name="content_pm" value={formData.content_pm} label="Type Something" fullWidth onChange={(e) => onChange(e)} />
-                        </Grid>
-                        <Grid xs={2} align="right">
-                            <Fab type="submit" color="primary" aria-label="add"><AiOutlineSend /></Fab>
-                        </Grid>
+    const response = await privateMessageService.postPrivateMessage(formData);
+
+    if (response.status === 200) {
+      let formDataCopy = { ...formData };
+      formDataCopy.user_created = user;
+      dispatch(addMessage(formDataCopy));
+
+      navigate("/conversation/" + id_privateCall);
+    }
+  };
+
+  return (
+    <div>
+      <Grid item xs={12}>
+        <List>
+          <ListItem button key="RemySharp">
+            <ListItemIcon>
+              <Avatar
+                alt="Remy Sharp"
+                src="https://material-ui.com/static/images/avatar/1.jpg"
+              />
+            </ListItemIcon>
+            <ListItemText primary="John Wick"></ListItemText>
+          </ListItem>
+        </List>
+        <div className="scroll">
+          <List
+            className={{
+              height: "70vh",
+              overflowY: "auto",
+            }}
+          >
+            {privateMessage.message?.map((message, key) => (
+              <ListItem key={key}>
+                {message.user_created.id === user.id ? (
+                  <>
+                    <Grid container className="flex-end">
+                      <div className="containerMessage">
+                        <ListItemText
+                          key={message}
+                          className="message"
+                          style={{
+                            backgroundColor: theme.palette.primary.main,
+                            color: "white",
+                          }}
+                          align="right"
+                          primary={message.content_pm}
+                        ></ListItemText>
+                        <ListItemText
+                          align="right"
+                          secondary={new Date(
+                            message.date_created
+                          ).toLocaleTimeString()}
+                        ></ListItemText>
+                      </div>
                     </Grid>
-                </Box>
+                  </>
+                ) : (
+                  <>
+                    <Grid container className="flex-start">
+                      <div className="containerMessage">
+                        <ListItemText
+                          key={message}
+                          className="message"
+                          style={{ backgroundColor: "white" }}
+                          align="left"
+                          primary={message.content_pm}
+                        ></ListItemText>
+                        <ListItemText
+                          align="right"
+                          secondary={new Date(
+                            message.date_created
+                          ).toLocaleTimeString()}
+                        ></ListItemText>
+                      </div>
+                    </Grid>
+                  </>
+                )}
+              </ListItem>
+            ))}
+          </List>
+        </div>
+        <Divider />
+        <Box component="form" onSubmit={sendMessage} noValidate sx={{ mt: 1 }}>
+          <Grid container style={{ padding: "5px" }}>
+            <Grid item xs={10}>
+              <TextField
+                id="outlined-basic-email"
+                name="content_pm"
+                value={formData.content_pm}
+                label="Type Something"
+                fullWidth
+                onChange={(e) => onChange(e)}
+              />
             </Grid>
-        </div>);
-
-}
+            <Grid xs={2} align="right">
+              <Fab type="submit" color="primary" aria-label="add">
+                <AiOutlineSend />
+              </Fab>
+            </Grid>
+          </Grid>
+        </Box>
+      </Grid>
+    </div>
+  );
+};
 export default Conversation;
