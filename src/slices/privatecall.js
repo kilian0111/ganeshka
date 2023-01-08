@@ -24,16 +24,22 @@ export const getPrivateCallById = createAsyncThunk(
 );
 const privateCallByIdSlice = createSlice({
   name: "privateCall",
-  initialState: null,
+  initialState: { conversation: null },
+  reducers: {
+    addConversation: (state, action) => {
+      state.conversation.push(action.payload);
+      return state;
+    },
+  },
   extraReducers: {
     [getPrivateCallById.fulfilled]: (state, action) => {
       console.log("fulfilled", state);
-      state.privateCall = action.payload;
+      state.conversation = action.payload;
       return state;
     },
     [getPrivateCallById.rejected]: (state, action) => {
       console.log("rejected", state);
-      state.privateCall = null;
+      state.conversation = null;
       return state;
     },
   },

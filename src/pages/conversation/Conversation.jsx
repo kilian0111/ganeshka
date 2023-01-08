@@ -19,6 +19,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import privateMessageService from "../../services/privateMessage.service";
 import "./Conversation.css";
 import { getPrivateCallById } from "../../slices/privatecall";
+import config from "../../config/index";
 
 const Conversation = () => {
   const theme = useTheme();
@@ -32,7 +33,7 @@ const Conversation = () => {
   const { privateCall } = useSelector((state) => state);
   const id_privateCall = parseInt(id);
 
-  console.log(privateCall);
+  console.log("privateCall", privateCall);
 
   // Get current date
   var date = new Date().toISOString().split("T")[0];
@@ -85,17 +86,22 @@ const Conversation = () => {
   return (
     <div>
       <Grid item xs={12}>
-        <List>
-          {privateCall?.map((call, key) => console.log(call))}
-          <ListItem button key="RemySharp">
-            <ListItemIcon>
-              <Avatar
-                alt="Remy Sharp"
-                src="https://material-ui.com/static/images/avatar/1.jpg"
-              />
-            </ListItemIcon>
-            <ListItemText primary="John Wick"></ListItemText>
-          </ListItem>
+        <List className="containerHeaderConversation">
+          {privateCall.conversation?.map((call, key) => (
+            <ListItem button key={call.nom_PrivateCall}>
+              <ListItemIcon>
+                <Avatar
+                  alt={call.nom_PrivateCall}
+                  src={config.API_URL + "assets/" + call.Image}
+                />
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  call.nom_PrivateCall ? call.nom_PrivateCall : "Conversation"
+                }
+              ></ListItemText>
+            </ListItem>
+          ))}
         </List>
         <div className="scroll">
           <List
@@ -133,6 +139,9 @@ const Conversation = () => {
                   <>
                     <Grid container className="flex-start">
                       <div className="containerMessage">
+                        <span style={{ color: "grey" }}>
+                          {message.user_created.first_name}
+                        </span>
                         <ListItemText
                           key={message}
                           className="message"
