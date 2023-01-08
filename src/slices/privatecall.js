@@ -33,12 +33,10 @@ const privateCallByIdSlice = createSlice({
   },
   extraReducers: {
     [getPrivateCallById.fulfilled]: (state, action) => {
-      console.log("fulfilled", state);
       state.conversation = action.payload;
       return state;
     },
     [getPrivateCallById.rejected]: (state, action) => {
-      console.log("rejected", state);
       state.conversation = null;
       return state;
     },
