@@ -33,8 +33,6 @@ const Conversation = () => {
   const { privateCall } = useSelector((state) => state);
   const id_privateCall = parseInt(id);
 
-  console.log("privateCall", privateCall);
-
   // Get current date
   var date = new Date().toISOString().split("T")[0];
   var time = new Date().toTimeString().split(" ")[0];
