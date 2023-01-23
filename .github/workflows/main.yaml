@@ -1,0 +1,18 @@
+name: CD
+on:
+  push:
+    branches: [dev]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      SSHPASS: ${{ secrets.APP_PASS  }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: APT
+        run: sudo apt update && sudo apt install -y sshpass
+
+      - name: command
+        run: sshpass -e ssh -o stricthostkeychecking=no ${{ secrets.APP_USER }}@${{ secrets.APP_HOST }}
+          " cd /home/ubuntu/front-squirel/ganeshka/ && git pull && cd .. && ./deployDocker.sh "
