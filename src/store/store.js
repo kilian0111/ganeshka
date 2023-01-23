@@ -5,6 +5,7 @@ import usersReducer from "../slices/user";
 import postReducer from "../slices/post";
 import privateMessage from "../slices/privatemessage";
 import privateCall from "../slices/privatecall";
+import privateCalls from "../slices/privatecall";
 
 const reducer = {
   auth: authReducer,
@@ -13,6 +14,7 @@ const reducer = {
   posts: postReducer,
   privateMessage: privateMessage,
   privateCall: privateCall,
+  privateCalls: privateCalls,
 };
 
 const store = configureStore({

@@ -22,8 +22,27 @@ export const getPrivateCallById = createAsyncThunk(
     }
   }
 );
+
+export const getAllPrivateCall = createAsyncThunk(
+  "privateCalls",
+  async (id_privateCall, thunkAPI) => {
+    try {
+      const response = await privateCallService.getConversation(id_privateCall);
+      return response.data;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      // thunkAPI.dispatch(setMessage(message));
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
 const privateCallByIdSlice = createSlice({
-  name: "privateCall",
+  name: "privateCallById",
   initialState: { conversation: null },
   reducers: {
     addConversation: (state, action) => {
@@ -37,6 +56,14 @@ const privateCallByIdSlice = createSlice({
       return state;
     },
     [getPrivateCallById.rejected]: (state, action) => {
+      state.conversation = null;
+      return state;
+    },
+    [getAllPrivateCall.fulfilled]: (state, action) => {
+      state.conversation = action.payload;
+      return state;
+    },
+    [getAllPrivateCall.rejected]: (state, action) => {
       state.conversation = null;
       return state;
     },
