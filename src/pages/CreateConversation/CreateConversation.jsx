@@ -41,25 +41,28 @@ export default function CreateConversation() {
   const fileInput = useRef();
 
   useEffect(() => {
-    dispatch(getUserAuth({ token: token }));
+    dispatch(getUserAuth());
     dispatch(getAllUsers(user?.id));
   }, []);
 
   const [formData, setFormData] = useState({
     title_conversation: "",
-    multiple_users: [user?.id, ""],
     status: "",
     file: null,
   });
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     // if (!user) {
     //   navigate("/login");
     // }
     let formDataCopy = { ...formData };
+    const personNameCopy = [...personName];
+    personNameCopy.push(user.id);
+    formDataCopy.multiple_users = personNameCopy
     const file = fileInput.current.files[0];
     if (file) {
       const fileData = new FormData();
@@ -78,9 +81,8 @@ export default function CreateConversation() {
 
   // MULTIPLE SELECT
   const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
+
+    const value = event.target.value;
     setPersonName(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
