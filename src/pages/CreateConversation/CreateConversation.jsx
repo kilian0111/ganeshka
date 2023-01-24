@@ -18,6 +18,7 @@ import InputLabel from "@mui/material/InputLabel";
 import { useRef } from "react";
 import uploadFileService from "../../services/uploadFile.service";
 import { FormControl, MenuItem, OutlinedInput, Select } from "@mui/material";
+import privateCallService from "../../services/privateCall.service";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -46,9 +47,9 @@ export default function CreateConversation() {
   }, []);
 
   const [formData, setFormData] = useState({
-    title_conversation: "",
-    status: "",
-    file: null,
+    nom_PrivateCall: "",
+    Status: "",
+    Image: null,
   });
 
   const onChange = (e) =>
@@ -56,32 +57,37 @@ export default function CreateConversation() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // if (!user) {
-    //   navigate("/login");
-    // }
+
+    if (!user) {
+      navigate("/login");
+    }
+
     let formDataCopy = { ...formData };
     const personNameCopy = [...personName];
     personNameCopy.push(user.id);
-    formDataCopy.multiple_users = personNameCopy
+
+    // formDataCopy.user_PrivateCall = personNameCopy;
+
     const file = fileInput.current.files[0];
+
     if (file) {
       const fileData = new FormData();
       fileData.append("title", "image" + Date.now);
       fileData.append("image_" + user?.id + "_" + Date.now(), file);
       const res = await uploadFileService.uploadFile(fileData);
-      formDataCopy.file = res.data;
+      formDataCopy.Image = res.data;
     }
-    console.log(formDataCopy);
-    // const response = await postService.postPost(formDataCopy);
 
-    // if (response.status === 200) {
-    //   navigate("/");
-    // }
+    console.log(formDataCopy);
+    const response = await privateCallService.postConversation(formDataCopy);
+
+    if (response.status === 200) {
+      navigate("/messages");
+    }
   };
 
   // MULTIPLE SELECT
   const handleChange = (event) => {
-
     const value = event.target.value;
     setPersonName(
       // On autofill we get a stringified value.
@@ -109,9 +115,9 @@ export default function CreateConversation() {
             margin="normal"
             required
             fullWidth
-            id="title_conversation"
+            id="nom_PrivateCall"
             label="Titre"
-            name="title_conversation"
+            name="nom_PrivateCall"
             autoComplete="title_conversation"
             autoFocus
             onChange={(e) => onChange(e)}
