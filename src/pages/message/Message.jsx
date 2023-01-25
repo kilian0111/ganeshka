@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import config from "../../config";
 import { getAllPrivateCall } from "../../slices/privatecall";
 import { getUserAuth } from "../../slices/user";
+import { Button } from "@mui/material";
 
 const API_URL = Config.API_URL + "users/";
 
@@ -110,6 +111,13 @@ export default function Chat() {
           height: "80vh",
         }}
       >
+        <Button
+          variant="contained"
+          href="/create-conversation"
+          style={{ margin: "10px" }}
+        >
+          Nouveau
+        </Button>
         <Grid
           item
           xs={12}
