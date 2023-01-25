@@ -23,7 +23,10 @@ const getConversationById = async (id_privateCall) => {
 };
 
 const postConversation = async (data) => {
-  const response = await api.post(API_URL, data);
+  const response = await api.post(
+    API_URL + "?fields=*,user_PrivateCall.*",
+    data
+  );
   console.log(data);
   console.log(response);
   return response;

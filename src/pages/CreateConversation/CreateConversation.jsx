@@ -6,7 +6,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Logo } from "../../components/atoms/Logo/Logo";
-import postService from "../../services/post.service";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -66,7 +65,15 @@ export default function CreateConversation() {
     const personNameCopy = [...personName];
     personNameCopy.push(user.id);
 
-    // formDataCopy.user_PrivateCall = personNameCopy;
+    // Création de l'objet pour la relation many to many
+    let usersId = [];
+    personNameCopy.map((id) => {
+      usersId.push({
+        directus_users_id: id,
+      });
+    });
+
+    formDataCopy.user_PrivateCall = usersId;
 
     const file = fileInput.current.files[0];
 
@@ -138,7 +145,7 @@ export default function CreateConversation() {
             >
               {allUsers?.map((user) => (
                 <MenuItem key={user.id} value={user.id}>
-                  {user.first_name + "" + user.last_name}
+                  {user.first_name + " " + user.last_name}
                 </MenuItem>
               ))}
             </Select>
