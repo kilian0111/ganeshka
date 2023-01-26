@@ -36,8 +36,8 @@ const setup = (store) => {
           !originalConfig._retry &&
           !refreshAlreadyCalled
         ) {
-          refreshAlreadyCalled = true;
-          originalConfig._retry = true;
+            refreshAlreadyCalled = true;
+            originalConfig._retry = true;
 
           await axiosInstance
             .post("/auth/refresh", {
@@ -45,6 +45,9 @@ const setup = (store) => {
               mode: "json",
             })
             .then((response) => {
+                localStorage.removeItem("access_token");
+                localStorage.removeItem("refresh_token");
+                dispatch(deleteToken())
               dispatch(
                 reloadToken({
                   token: response.data.data.access_token,
@@ -60,7 +63,6 @@ const setup = (store) => {
           return axiosInstance(originalConfig);
         }
       }
-      refreshAlreadyCalled = false;
       return Promise.reject(err);
     }
   );
