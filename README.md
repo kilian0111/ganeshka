@@ -1,4 +1,4 @@
-# Projet Réseau social - Squirrel
+# Projet Réseau Social - Squirrel
 
 Membres du projet :  Marmilliot Kilian, Picard Antoine, Nivon Fabien , Costamagna Ewan, Wolff-Dumontel Bruno
 
