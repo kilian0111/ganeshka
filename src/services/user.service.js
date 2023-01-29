@@ -23,13 +23,12 @@ const deleteUser = async (id) => {
 // récupère les utilisateurs actif
 const getUsers = async (currentId, searchName) => {
   let requette;
-  if (searchName == "") {
+  if (searchName === "") {
     requette = `?filter={"_and":[{"status":{"_eq":"active"}},{"id":{"_neq":"${currentId}"}}]}`;
   } else {
     requette = `?filter={"_or":[{"_and":[{"first_name":{"_contains":"${searchName}"}},{"status":{"_eq":"active"}},{"id":{"_neq":"${currentId}"}}]},{"_and":[{"last_name":{"_contains":"${searchName}"}},{"status":{"_eq":"active"}},{"id":{"_neq":"${currentId}"}}]}]}`;
   }
   const response = await api.get(API_URL + requette);
-  //  console.log(API_URL + requette)
   return response.data;
 };
 
@@ -39,7 +38,13 @@ const getAllUsers = async (currentId) => {
   return response.data;
 };
 
+const getUsersById = async (id) => {
+    const response = await api.get(API_URL + "/" + id + "?fields=*,component.*");
+    return response.data;
+}
+
 const usersService = {
+  getUsersById,
   getUserAuth,
   getUsers,
   updateUser,

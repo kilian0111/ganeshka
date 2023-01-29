@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-// import { ThemeProvider } from 'styled-components';
 import { Routes, Route } from "react-router-dom";
 import { Home } from "./pages/Home/Home";
 import CreatePost from "./pages/CreatePost/CreatePost";
@@ -16,6 +15,7 @@ import createTheme from "./themes/default.js";
 import refreshTokenInterceptor from "./config/refreshTokenInterceptor";
 import UserProfile from "./pages/parametre/Paramtre";
 import CreateConversation from "./pages/CreateConversation/CreateConversation";
+import Profil from "./pages/Profil/Profil";
 
 function App() {
   refreshTokenInterceptor(store);
@@ -35,6 +35,7 @@ function App() {
               element={<CreateConversation />}
             />
             <Route path="/conversation/:id" element={<Conversation />} />
+            <Route path="/profile/:id" element={<Profil />} />
             <Route path="/parametre" element={<UserProfile />} />
           </Routes>
         </div>

@@ -60,6 +60,9 @@ export const Navbar = () => {
         menu.push({ text: 'Paramètre', link: '/parametre'});
 
         menu.push({ text: 'Logout', link: '#', action: () => {dispatch(deleteToken());  navigate("/login"); } });
+        if(userMe !== null ){
+            menu.push({ text: 'Profile public', link: '/profile/' + userMe.id  });
+        }
 
     } else {
         menu.push({ text: 'Connexion', link: '/login' });
