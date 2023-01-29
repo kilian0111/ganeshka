@@ -42,3 +42,6 @@ http://squirel.kilian-marmilliot.com/
 - Lien du Directus :
 http://squirel.kilian-marmilliot.com:8055
 
+- Lien du Figma :
+https://www.figma.com/file/yAKOWisiIpbnEtYPlSpEPW/Squirrel?t=tFyK5sWPU07GkBl5-1
+
