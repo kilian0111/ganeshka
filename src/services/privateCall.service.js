@@ -27,8 +27,6 @@ const postConversation = async (data) => {
     API_URL + "?fields=*,user_PrivateCall.*",
     data
   );
-  console.log(data);
-  console.log(response);
   return response;
 };
 

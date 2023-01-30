@@ -19,16 +19,17 @@ import config from "../../config";
 import { getAllPrivateCall } from "../../slices/privatecall";
 import { getUserAuth } from "../../slices/user";
 import { Button } from "@mui/material";
+import {useNavigate} from "react-router-dom";
 
-const API_URL = Config.API_URL + "users/";
 
 export default function Chat() {
   const [allUser, setAllUser] = useState([]);
-  const [research, setResearch] = useState();
 
-  const user = useSelector((state) => state.users.me);
+
+
   const { privateCalls } = useSelector((state) => state);
   const dispatch = useDispatch();
+  let navigate = useNavigate()
 
   useEffect(() => {
     dispatch(getUserAuth());
@@ -82,6 +83,10 @@ export default function Chat() {
   const [formData, setFormData] = useState({
     search: "",
   });
+
+  const goToPage = (user) => {
+    navigate("/profile/"+user.id);
+  }
 
   useEffect(() => {
     // Se lance lorsque formData est modifié
@@ -177,11 +182,12 @@ export default function Chat() {
           </List>
           <Divider></Divider>
           <p>All users</p>
-          <List>
+          <List >
             {allUser.map((user) => {
               return (
                 <div key={user.id}>
-                  <List>
+                  <a>
+                  <List button onClick={() => goToPage(user)}>
                     <ListItem key="User">
                       <ListItemIcon>
                         <Avatar
@@ -201,6 +207,7 @@ export default function Chat() {
                       ></ListItemText>
                     </ListItem>
                   </List>
+                  </a>
                 </div>
               );
             })}

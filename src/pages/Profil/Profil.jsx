@@ -50,14 +50,20 @@ const Profil = () => {
     useEffect(() => {
         // tableaux d'object
         let compnent = user?.component != null && user.component.length > 0 ? [ ...user.component] : null;
+
         let lesComposant = [...allComponents];
+
         let listComponent = [];
         lesComposant.forEach((x) => {
-            x.ordre = null;
+            x.ordre = 0;
         });
         if (compnent != null && compnent.length > 0) {
             compnent.forEach((x) => {
-               lesComposant.find((y) => y.id === x.id).ordre = x.ordre;
+                let compo = lesComposant.find((y) => y.id === x.components_id);
+                if (compo != null) {
+                    compo.ordre = x.ordre;
+                }
+
             })
         }
         lesComposant.sort((a, b) => a.ordre - b.ordre);
@@ -65,6 +71,7 @@ const Profil = () => {
             x.component = putTheComponent(x.nom);
         })
        setComponentList(lesComposant);
+
     }, [user])
 
     const putTheComponent = (component) => {
@@ -95,27 +102,59 @@ const Profil = () => {
         draggedComponent.current = elt;
     }
 
+    const putOnVisible = (e,component) => {
+
+        let max = 0;
+        componentsList.forEach((x) => {
+            if (x.ordre != null && x.ordre !== 0 && x.ordre > max) {
+                max = x.ordre;
+            }
+        });
+
+        let copyList = [...componentsList];
+        copyList.find((x) => x.id === component.id).ordre = max +1;
+        setComponentList(copyList);
+        updateData(copyList);
+    }
+
+    const hideComponent = (e, component) => {
+        let copyList = [...componentsList];
+        copyList.find((x) => x.id === component.id).ordre = 0;
+        setComponentList(copyList);
+        updateData(copyList);
+    }
+
     const renderComponent = (elts) => {
+        elts.sort((a, b) => a.ordre - b.ordre);
         return elts.map((x) => {
             return (
-                <div
-                    key={x.id}
-                    draggable
-                    onDragStart={(e) => onComponentDragStart(e, x)}
-                >
-                    <ListItem button>
-                        <ListItemText primary={x.nom} />
-                        <ListItemIcon>
-                            {x.component}
-                        </ListItemIcon>
-                    </ListItem>
-                </div>
+                    <div
+                        key={x.id}
+                        draggable={true}
+                        onDragStart={(e) => onComponentDragStart(e, x)}
+                    >
+                        <ListItem button onClick={(e) => {  if(x.ordre == 0) { putOnVisible(e, x) } else { hideComponent(e, x) } }}>
+                            <ListItemText primary={x.nom} />
+                            <ListItemIcon>
+                                {x.component}
+                            </ListItemIcon>
+                        </ListItem>
+                    </div>
             )
         })
     }
 
     const onListDragOn =  (e, elt) => {
         draggedOnComponent.current = elt;
+    }
+
+    const hideAllComponents = () => {
+        let copyList = [...componentsList];
+        copyList.forEach((x) => {
+            x.ordre = 0;
+        })
+        setComponentList(copyList);
+        updateData(copyList);
     }
 
 
@@ -128,18 +167,21 @@ const Profil = () => {
         let max = 0;
         if(draggedOnComponent.current ) {
             componentsList.forEach((x) => {
-                if (x.ordre != null && x.ordre > max) {
+                if (x.ordre != null && x.ordre != 0   && x.ordre > max) {
                     max = x.ordre;
                 }
             });
             copyList[index].ordre = max + 1;
 
         } else {
-            copyList[index].ordre = null;
+            copyList[index].ordre = 0;
 
         }
         setComponentList( copyList);
+        updateData(copyList);
 
+    }
+    const updateData = async (copyList) => {
         let copyListSecond = [...copyList];
         let list = [];
         copyListSecond.forEach((x) => {
@@ -151,17 +193,17 @@ const Profil = () => {
             list.push(entite);
 
         });
-
-         await componentService.addComponent({component:list});
-
+        console.log('yo')
+        await componentService.updateComponent(userMe.id,list);
     }
+
     const canModify = () => {
         if(userMe?.id === user?.id) {
             return ( <div style={{marginR:"10vx",display:"flex",justifyContent:"space-between" }}>
                 <IconButton  onClick={handleClick}>
                     <FaBars></FaBars>
                 </IconButton>
-                <IconButton  onDragOver={(e) => onListDragOn(e,false)} onDragEnd={(e) => executeDraggable(e)}>
+                <IconButton  onClick={hideAllComponents} onDragOver={(e) => onListDragOn(e,false)} onDragEnd={(e) => executeDraggable(e)}>
                     <FaTrash></FaTrash>
                 </IconButton>
             </div>);
@@ -175,16 +217,16 @@ const Profil = () => {
                 { canModify() }
 
                 <Drawer open={open} onClose={handleClick}>
-                    <List>
+                    <List style={{width:"60vw"}}>
                         <div onDragEnd={(e) => executeDraggable(e)}  onDragLeave={(e) => onListDragOn(e,true)} onDragOver={(e) => onListDragOn(e,false)}>
-                            { renderComponent(componentsList.filter((x) => { return x.ordre == null}))}
+                            { renderComponent(componentsList.filter((x) => { return x.ordre == 0}))}
                         </div>
                     </List>
                 </Drawer>
             </div>
             <div style={{height:"50vh"}}  onDragEnd={(e) => executeDraggable(e)}  onDragOver={(e) => onListDragOn(e,true)}>
                 <List>
-                    { renderComponent(componentsList.filter((x) => { return x.ordre != null}))}
+                    { renderComponent(componentsList.filter((x) => { return x.ordre > 0}))}
                 </List>
 
 

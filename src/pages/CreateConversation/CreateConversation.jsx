@@ -85,7 +85,6 @@ export default function CreateConversation() {
       formDataCopy.Image = res.data;
     }
 
-    console.log(formDataCopy);
     const response = await privateCallService.postConversation(formDataCopy);
 
     if (response.status === 200) {
